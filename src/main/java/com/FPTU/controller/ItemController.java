@@ -22,14 +22,15 @@ public class ItemController {
   }
 
 
+
   @PreAuthorize("hasRole('INSTRUCTOR')")// Restrict access to INSTRUCTOR role
-  @PostMapping("/addItem")
+  @PostMapping
   public ResponseEntity<ItemDTO> addItem(@RequestBody ItemDTO itemDTO) {
     itemDTO = itemService.save(itemDTO);
     return ResponseEntity.ok(itemDTO);
   }
   @PreAuthorize("hasRole('INSTRUCTOR')")
-  @PutMapping("detail/{id}")
+  @PutMapping
   public ResponseEntity<ItemDTO> updateItem(@RequestBody ItemDTO itemDTO, @PathVariable("id") Long id) {
     itemDTO.setId(id);
     return ResponseEntity.ok(itemDTO);

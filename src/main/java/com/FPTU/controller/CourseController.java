@@ -20,13 +20,13 @@ public class CourseController {
     public List<Course> getAllCourses() {
         return courseService.getAllCourses();
     }
-    @PostMapping("/addCourse")
+    @PostMapping()
     @PreAuthorize("hasRole('INSTRUCTOR')") // Restrict access to INSTRUCTOR role
     public ResponseEntity<CourseDTO> addCourse(@RequestBody CourseDTO courseDTO) {
         courseDTO = courseService.save(courseDTO);
         return  ResponseEntity.ok(courseDTO);
     }
-    @PutMapping("detail/{id}")
+    @PutMapping()
     public ResponseEntity<CourseDTO> updateCourse(@RequestBody CourseDTO courseDTO, @PathVariable("id") Long id) {
         courseDTO.setId(id);
         return ResponseEntity.ok(courseDTO);

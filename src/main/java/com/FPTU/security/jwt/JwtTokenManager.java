@@ -1,14 +1,15 @@
 package com.FPTU.security.jwt;
 
+import com.FPTU.model.User;
+import com.FPTU.model.UserRole;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.FPTU.model.User;
-import com.FPTU.model.UserRole;
-import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.Date;
 
 
 @Component
@@ -34,7 +35,7 @@ public class JwtTokenManager {
         .withClaim("role", userRole.name())
         .withIssuedAt(new Date())
         .withExpiresAt(new Date(System.currentTimeMillis()
-            + jwtProperties.getExpirationMinute() * 60 * 1000))
+            + jwtProperties.getExpirationMinute() * 60 * 100000))
         .sign(Algorithm.HMAC256(jwtProperties.getSecretKey().getBytes()));
   }
 

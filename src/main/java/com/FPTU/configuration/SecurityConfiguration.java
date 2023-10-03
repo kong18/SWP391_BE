@@ -1,6 +1,5 @@
 package com.FPTU.configuration;
 
-import com.FPTU.model.UserRole;
 import com.FPTU.security.jwt.JwtAuthenticationEntryPoint;
 import com.FPTU.security.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
@@ -38,8 +37,8 @@ public class SecurityConfiguration {
         .authorizeRequests()
         .antMatchers("/register", "/login", "/v3/api-docs/**",
             "/swagger-ui/**", "/swagger-ui.html", "/actuator/**").permitAll()
-        .antMatchers("/items/addItem", "/courses/addCourse").hasRole(UserRole.INSTRUCTOR.name())
-        .antMatchers("/items/**", "/courses/**").hasRole(UserRole.INSTRUCTOR.name()) // Restrict other item and course endpoints to INSTRUCTOR role
+        //.antMatchers("/items/addItem", "/courses/addCourse").hasRole(UserRole.INSTRUCTOR.name())
+        .antMatchers("/items/**", "/courses/**").authenticated()
         .anyRequest().authenticated().and()
         .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

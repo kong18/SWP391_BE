@@ -2,6 +2,6 @@ package com.FPTU.model;
 
 public enum UserRole {
 
-  CUSTOMER, ADMIN, INSTRUCTOR
+  ROLE_CUSTOMER, ROLE_ADMIN, ROLE_INSTRUCTOR
 
 }
