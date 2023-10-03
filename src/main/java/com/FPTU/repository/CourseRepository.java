@@ -11,6 +11,6 @@ import java.util.List;
 public interface CourseRepository extends JpaRepository<Course, Long> {
     List<Course> findAll();
 
-    @Query("SELECT c FROM Course c WHERE c.title LIKE %:title%")
-    List<Course> findByTitleContainingIgnoreCase(String title);
+    @Query("SELECT c FROM Course c WHERE c.title LIKE %:name%")
+    List<Course> findByNameContainingIgnoreCase(String name);
 }

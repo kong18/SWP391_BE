@@ -55,21 +55,10 @@ public class CourseServiceImpl implements CourseService {
         return courseConverter.toDTO(course);
     }
 
-    @Override
-    public List<CourseDTO> searchCourses(String title) { // Update the parameter name
-        List<Course> matchingCourses = courseRepository.findByTitleContainingIgnoreCase(title); // Update the method call
+    public List<CourseDTO> searchCourses(String name){
+        List<Course> matchingCourses = courseRepository.findByNameContainingIgnoreCase(name);
         return matchingCourses.stream()
                 .map(courseConverter::toDTO)
                 .collect(Collectors.toList());
     }
-
-    @Override
-    public boolean deleteCourseById(Long id) {
-        if(courseRepository.existsById(id)){
-            courseRepository.deleteById(id);
-            return true;
-        }
-        return false;
-    }
-
 }
