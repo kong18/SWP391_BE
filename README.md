@@ -1,5 +1,10 @@
-
+<<<<<<< HEAD
+# DrawingCourseSellingWeb
+=======
 # Drawing Course Selling Web
+
+>>>>>>> 41b4cc1249f35f1b9a96de6227c7b71fb601d4e6
+
 
 ## Technologies
 - Build Tool: Gradle
