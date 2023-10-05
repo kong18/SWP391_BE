@@ -12,7 +12,9 @@ import com.FPTU.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -27,8 +29,13 @@ public class CourseServiceImpl implements CourseService {
     private InstructorRepository instructorRepository;
 
     @Override
-    public List<Course> getAllCourses() {
-        return courseRepository.findAll();
+    public List<CourseDTO> getAllCourses() {
+
+        List<CourseDTO> list = new ArrayList<>();
+        for(Course c: courseRepository.findAll()){
+            list.add(courseConverter.toDTO(c));
+        }
+        return list;
     }
 
     @Override
@@ -48,5 +55,21 @@ public class CourseServiceImpl implements CourseService {
         return courseConverter.toDTO(course);
     }
 
+    @Override
+    public List<CourseDTO> searchCourses(String title) { // Update the parameter name
+        List<Course> matchingCourses = courseRepository.findByTitleContainingIgnoreCase(title); // Update the method call
+        return matchingCourses.stream()
+                .map(courseConverter::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean deleteCourseById(Long id) {
+        if(courseRepository.existsById(id)){
+            courseRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
 
 }
