@@ -23,11 +23,10 @@ public class ItemConverter {
     return itemDTO;
   }
 
-  public Item toEntity(ItemDTO itemDTO,Item item){
-    item.setName(item.getName());
+  public Item toEntity(ItemDTO itemDTO, Item item) {
+    item.setName(itemDTO.getName());
     item.setDescription(itemDTO.getDescription());
     item.setPrice(itemDTO.getPrice());
     return item;
   }
-
 }

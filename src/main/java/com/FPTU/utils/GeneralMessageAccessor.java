@@ -7,11 +7,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 
-/**
- * Created on April 2023.
- *
- * @author Jay
- */
 @Service
 public class GeneralMessageAccessor {
 

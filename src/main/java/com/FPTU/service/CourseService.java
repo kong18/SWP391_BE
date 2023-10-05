@@ -8,6 +8,8 @@ import java.util.List;
 
 
 public interface CourseService {
-    List<Course> getAllCourses();
+    List<CourseDTO> getAllCourses();
     CourseDTO save(CourseDTO courseDTO);
+    List<CourseDTO> searchCourses(String title); // Update the parameter name
+    boolean deleteCourseById(Long id);
 }
