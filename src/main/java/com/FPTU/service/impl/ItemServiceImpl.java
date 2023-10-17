@@ -35,7 +35,7 @@ public class ItemServiceImpl implements ItemService {
 
   @Override
   public ItemDTO save(ItemDTO itemDTO) {
-    Item item = new Item();
+    Item item;
     if (itemDTO.getId() != null) {
       Item oldItem = itemRepository.getOne(itemDTO.getId());
       item = itemConverter.toEntity(itemDTO, oldItem);
@@ -65,10 +65,23 @@ public class ItemServiceImpl implements ItemService {
 
   @Override
   public List<ItemDTO> searchItems(String name) {
-    // Use the custom query method to search for items by name
     List<Item> matchingItems = itemRepository.findByNameContainingIgnoreCase(name);
     return matchingItems.stream()
-        .map(itemConverter::toDTO)
-        .collect(Collectors.toList());
+            .map(itemConverter::toDTO)
+            .collect(Collectors.toList());
+  }
+
+  @Override
+  public ItemDTO updateItemById(Long id, ItemDTO itemDTO) {
+    Optional<Item> existingItemOptional = itemRepository.findById(id);
+    if (!existingItemOptional.isPresent()) {
+      return null; // Item with the given ID not found
+    }
+
+    Item existingItem = existingItemOptional.get();
+    existingItem = itemConverter.toEntity(itemDTO, existingItem);
+    existingItem = itemRepository.save(existingItem);
+
+    return itemConverter.toDTO(existingItem);
   }
 }

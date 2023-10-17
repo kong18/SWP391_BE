@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -26,20 +25,20 @@ public class OrderItem {
     @JoinColumn(name = "customer_id", nullable = false, referencedColumnName = "customer_id")
     private Customer customer;
 
-    @ManyToMany(mappedBy = "orderItems")
-    private List<Item> items = new ArrayList<>();
+    @OneToMany(mappedBy = "orderItem",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<OrderDetailItem> orderDetailItems = new ArrayList<>();
 
-    private Date orderDate;
-
-    private int quantity;
+    private String orderDate;
 
     private long total;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "paymentStatus")
-    private PaymentStatus paymentStatus;
+    @Column(name = "status")
+    private Status status;
 
     private String address;
 
     private String phoneNumber;
+
+    private String paymentMethod;
 }

@@ -11,6 +11,7 @@ public class ItemConverter {
     item.setName(itemDTO.getName());
     item.setDescription(itemDTO.getDescription());
     item.setPrice(itemDTO.getPrice());
+    item.setImg(itemDTO.getImg());
     return item;
   }
   public ItemDTO toDTO(Item item){
@@ -19,14 +20,17 @@ public class ItemConverter {
     itemDTO.setName(item.getName());
     itemDTO.setDescription(item.getDescription());
     itemDTO.setPrice(item.getPrice());
+    itemDTO.setImg(item.getImg());
     itemDTO.setCategoryId(item.getItemCategory().getCategoryId());
     return itemDTO;
   }
 
-  public Item toEntity(ItemDTO itemDTO, Item item) {
-    item.setName(itemDTO.getName());
+  public Item toEntity(ItemDTO itemDTO,Item item){
+    item.setName(item.getName());
     item.setDescription(itemDTO.getDescription());
     item.setPrice(itemDTO.getPrice());
+    item.setImg(itemDTO.getImg());
     return item;
   }
+
 }
