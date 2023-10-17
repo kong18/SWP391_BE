@@ -1,7 +1,9 @@
 package com.FPTU.controller;
 
 import com.FPTU.converter.ItemConverter;
+import com.FPTU.dto.CourseDTO;
 import com.FPTU.dto.ItemDTO;
+import com.FPTU.exceptions.CourseNotFoundException;
 import com.FPTU.model.Item;
 import com.FPTU.repository.ItemRepository;
 import com.FPTU.service.ItemService;
@@ -27,18 +29,22 @@ public class ItemController {
         return itemService.getAllItems();
 
     }
+    @GetMapping("/{id}")
+    public ItemDTO getItemById(@PathVariable("id") Long id) {
 
+        return itemService.getItemById(id);
+    }
 
-    @PreAuthorize("hasRole('INSTRUCTOR')")// Restrict access to INSTRUCTOR role
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<ItemDTO> addItem(@RequestBody ItemDTO itemDTO) {
         itemDTO = itemService.save(itemDTO);
         return ResponseEntity.ok(itemDTO);
     }
 
-    @PreAuthorize("hasRole('INSTRUCTOR')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<ItemDTO> updateItem(@RequestBody ItemDTO itemDTO, @PathVariable("id") Long id) {
+    public ResponseEntity<ItemDTO> updateItem(@PathVariable("id") Long id, @RequestBody ItemDTO itemDTO) {
         // Check if the item with the given ID exists
         Optional<Item> existingItemOptional = itemRepository.findById(id);
         if (!existingItemOptional.isPresent()) {
@@ -58,7 +64,7 @@ public class ItemController {
     }
 
 
-    @PreAuthorize("hasRole('INSTRUCTOR')") // Restrict access to INSTRUCTOR role
+    @PreAuthorize("hasRole('ADMIN')") // Restrict access to ADMIN role
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteItem(@PathVariable("id") Long id) {
         if (itemService.deleteItemById(id)) {

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,10 +21,8 @@ public class CourseCategory {
     @Column(name = "category_id")
     private Long categoryId;
 
-    @OneToOne()
-    @JsonIgnore
-    @JoinColumn(name = "course_id")
-    private Course course;
+    @OneToMany(mappedBy = "courseCategory")
+    private List<Course> courses;
 
     private String name;
 }

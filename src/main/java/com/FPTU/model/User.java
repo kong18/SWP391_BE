@@ -38,6 +38,10 @@ public class User {
 
   private String email;
 
+  private String img;
+
+  private String address;
+
   @Enumerated(EnumType.STRING)
   private UserRole userRole;
 

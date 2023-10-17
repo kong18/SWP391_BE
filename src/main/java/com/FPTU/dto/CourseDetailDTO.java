@@ -15,6 +15,7 @@ public class CourseDetailDTO {
     private String title;
     private String description;
     private String url;
+    private Long estimatedTime;
     private String document;
 
 }

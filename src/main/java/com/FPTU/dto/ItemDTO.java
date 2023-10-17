@@ -12,6 +12,5 @@ public class ItemDTO {
   private String description;
   private Long price;
   private Long categoryId;
-
-
+  private String img;
 }

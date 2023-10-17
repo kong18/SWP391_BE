@@ -1,9 +1,12 @@
+
 spring:
   datasource:
     url:  jdbc:mysql://localhost:3306/springboot
     username: root
     password: 12345
     driver-class-name: com.mysql.cj.jdbc.Driver
+    thymeleaf:
+      cache: false
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL5Dialect
@@ -45,3 +48,13 @@ swagger:
   app-version: 2.0.0
   app-license-url: https://www.apache.org/licenses/LICENSE-2.0.html
   app-license: Apache 2.0
+
+paypal:
+  mode: sandbox
+  client:
+    app: AVaxfL_hvQWJAo558WSOh3u97t0FV1cp12fn-R5EMEGQWOh7vFKbsbIWrtA87Yk9xrRzv1X_OKYhxp60
+    secret: ELcpX7e25pNJiD1U5W0qetvsB5qsZA8DMZuYDL_LXR7NpZvHMdmVTlGI9rQvYmFpsm2PlOxs7WQniktF
+server:
+  port: 8080
+
+
