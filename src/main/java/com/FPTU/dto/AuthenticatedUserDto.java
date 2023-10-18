@@ -18,4 +18,8 @@ public class AuthenticatedUserDto {
 
   private UserRole userRole;
 
+  private String img;
+
+  private String address;
+
 }

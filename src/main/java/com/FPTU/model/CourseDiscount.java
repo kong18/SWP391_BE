@@ -21,14 +21,14 @@ public class CourseDiscount {
     @Column(name = "discount_id")
     private Long discountId;
 
-    @OneToOne()
+    @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "course_id")
+    @JoinColumn(name = "course_id", nullable = false, referencedColumnName = "course_id")
     private Course course;
 
     private String name;
 
-    private long percent;
+    private Long percent;
 
     private Date startDate;
 

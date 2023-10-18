@@ -10,8 +10,8 @@ import java.util.List;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
-  List<Item> findAll();
+    List<Item> findAll();
 
-  @Query("SELECT i FROM Item i WHERE i.name LIKE CONCAT('%', :searchName, '%')")
-  List<Item> findByNameContainingIgnoreCase(@Param("searchName") String name);
+    @Query(value = "SELECT * FROM item WHERE name LIKE %:name%", nativeQuery = true)
+    List<Item> findByNameContainingIgnoreCase(@Param("name")String name);
 }

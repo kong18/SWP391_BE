@@ -6,10 +6,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CourseCategoryConverter {
-  public CourseCategoryDTO toDTO(CourseCategory courseCategory) {
-    CourseCategoryDTO courseCategoryDTO = new CourseCategoryDTO();
-    courseCategoryDTO.setId(courseCategory.getCategoryId());
-    courseCategoryDTO.setName(courseCategory.getName());
-    return courseCategoryDTO;
-  }
+    public CourseCategoryDTO toDTO(CourseCategory courseCategory) {
+        CourseCategoryDTO courseCategoryDTO = new CourseCategoryDTO();
+        courseCategoryDTO.setId(courseCategory.getCategoryId());
+        courseCategoryDTO.setName(courseCategory.getName());
+        return courseCategoryDTO;
+    }
 }

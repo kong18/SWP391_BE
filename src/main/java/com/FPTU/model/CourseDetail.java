@@ -20,7 +20,7 @@ public class CourseDetail {
     @Column(name = "video_id")
     private Long videoId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "course_id", nullable = false, referencedColumnName = "course_id")
     private Course course;
@@ -33,4 +33,6 @@ public class CourseDetail {
     private String videoURL;
 
     private String document;
+
+    private Long estimatedTime;
 }

@@ -14,17 +14,17 @@ import java.util.List;
 @Service
 public class CourseCategoryServiceImpl implements CourseCategoryService {
 
-  @Autowired
-  private CourseCategoryRepository courseCategoryRepository;
-  @Autowired
-  private CourseCategoryConverter courseCategoryConverter;
-  @Override
-  public List<CourseCategoryDTO> getAllCourseCategory() {
-    List<CourseCategoryDTO> list = new ArrayList<>();
-    for (CourseCategory c : courseCategoryRepository.findAll()) {
-      CourseCategoryDTO cDTO = courseCategoryConverter.toDTO(c);
-      list.add(cDTO);
+    @Autowired
+    private CourseCategoryRepository courseCategoryRepository;
+    @Autowired
+    private CourseCategoryConverter courseCategoryConverter;
+    @Override
+    public List<CourseCategoryDTO> getAllCourseCategory() {
+        List<CourseCategoryDTO> list = new ArrayList<>();
+        for (CourseCategory c : courseCategoryRepository.findAll()) {
+            CourseCategoryDTO cDTO = courseCategoryConverter.toDTO(c);
+            list.add(cDTO);
+        }
+        return list;
     }
-    return list;
-  }
 }
