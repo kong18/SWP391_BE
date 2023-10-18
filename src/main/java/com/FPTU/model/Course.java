@@ -20,8 +20,8 @@ public class Course {
 
     @ManyToOne()
     @JsonIgnore
-    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "user_id")
-    private User user;
+    @JoinColumn(name = "instructor_id", nullable = false, referencedColumnName = "instructor_id")
+    private Instructor instructor;
 
     @OneToMany(mappedBy = "course",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OrderDetailCourse> orderDetailCourses = new ArrayList<>();
@@ -48,10 +48,9 @@ public class Course {
     private Long price;
     private String img;
     private String createdDate;
+    private Long duration;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "level")
     private CourseLevel level;
-
-
 }

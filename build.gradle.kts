@@ -45,7 +45,6 @@ dependencies {
     compileOnly("org.projectlombok:lombok:1.18.26")
     annotationProcessor("org.projectlombok:lombok:1.18.26")
     annotationProcessor("org.mapstruct:mapstruct-processor:1.5.3.Final")
-
 }
 
 configurations {
@@ -77,9 +76,9 @@ checkstyle {
 
 }*/
 
-group = "com.FPTU"
+group = "com.FPT"
 version = "1.0.0"
-description = "DrawingCourseSellingWeb"
+description = "DrawingCourseSelling"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 publishing {

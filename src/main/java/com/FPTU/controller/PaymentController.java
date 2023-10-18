@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
-
 @Controller
 @RestController
 @RequestMapping("/payment")

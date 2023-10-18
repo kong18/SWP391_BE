@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @Log4j2
-@CrossOrigin
+@CrossOrigin("http://127.0.0.1:5173/")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/register")
