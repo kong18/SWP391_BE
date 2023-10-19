@@ -23,19 +23,17 @@ public class OrderCourse {
     private Long orderId;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false, referencedColumnName = "customer_id")
-    private Customer customer;
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    private User user;
 
-    @ManyToMany(mappedBy = "orderCourses")
-    private List<Course> courses = new ArrayList<>();
+    @OneToMany(mappedBy = "orderCourse",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<OrderDetailCourse> orderDetailCourses = new ArrayList<>();
 
-    private Date orderDate;
+    private String orderDate;
 
-    private int quantity;
+    private Long total;
 
-    private long total;
+    private String status;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "paymentStatus")
-    private PaymentStatus paymentStatus;
+    private String paymentMethod;
 }

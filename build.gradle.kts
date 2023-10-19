@@ -15,6 +15,7 @@ repositories {
 dependencies {
     api("org.springframework.boot:spring-boot-starter-web:2.7.10") {
         exclude("org.springframework.boot:spring-boot-starter-logging")
+        exclude("org.springframework.boot:spring-boot-starter-json")
     }
     api("org.springframework.boot:spring-boot-starter-log4j2:2.7.10")
     api("org.springframework.boot:spring-boot-starter-data-jpa:2.7.10")
@@ -31,14 +32,20 @@ dependencies {
     api("org.apache.logging.log4j:log4j-core:2.20.0")
     api("org.apache.logging.log4j:log4j-slf4j-impl:2.20.0")
     runtimeOnly("org.postgresql:postgresql:42.3.8")
+    implementation ("com.google.code.gson:gson:2.8.9")
     implementation("com.puppycrawl.tools:checkstyle:10.9.1")
     implementation("mysql:mysql-connector-java:8.0.33")
+    implementation("com.paypal.sdk:rest-api-sdk:1.4.1")
+    implementation ("com.stripe:stripe-java:22.0.0")
+    implementation ("com.google.api-client:google-api-client:1.30.10")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test:2.7.10")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.4.2")
     compileOnly("org.projectlombok:lombok:1.18.26")
     annotationProcessor("org.projectlombok:lombok:1.18.26")
     annotationProcessor("org.mapstruct:mapstruct-processor:1.5.3.Final")
+
 }
 
 configurations {

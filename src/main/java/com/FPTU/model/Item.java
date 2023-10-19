@@ -24,17 +24,15 @@ public class Item {
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "category_id", referencedColumnName = "category_id")
+    @JoinColumn(name = "category_id", nullable = false, referencedColumnName = "category_id")
     private ItemCategory itemCategory;
 
-    @ManyToMany()
-    @JsonIgnore
-    @JoinTable(name = "OrderDetail",
-        joinColumns = @JoinColumn(name = "item_id"),
-        inverseJoinColumns = @JoinColumn(name = "order_id"))
-    private List<OrderItem> orderItems = new ArrayList<>();
+    @OneToMany(mappedBy = "item",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<OrderDetailItem> orderDetailItems = new ArrayList<>();
 
     private String name;
+
+    private String img;
 
     private String description;
 

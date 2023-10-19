@@ -18,31 +18,36 @@ public class Course {
     @Column(name = "course_id")
     private Long courseId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JsonIgnore
-    @JoinColumn(name = "instructor_id", nullable = false, referencedColumnName = "instructor_id")
-    private Instructor instructor;
+    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "user_id")
+    private User user;
 
-    @ManyToMany()
+    @OneToMany(mappedBy = "course",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<OrderDetailCourse> orderDetailCourses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "course",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<CourseDetail> courseDetails = new ArrayList<>();
+
+    @OneToMany(mappedBy = "course",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Rating> ratings = new ArrayList<>();
+
+    @OneToMany(mappedBy = "course",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
+
+    @ManyToOne
     @JsonIgnore
-    @JoinTable(name = "OrderDetail",
-        joinColumns = @JoinColumn(name = "course_id"),
-        inverseJoinColumns = @JoinColumn(name = "order_id"))
-    private List<OrderCourse> orderCourses = new ArrayList<>();
-
-    @OneToMany(mappedBy = "course",fetch = FetchType.LAZY)
-    private Set<CourseDetail> courseDetails = new HashSet<>();
-
-    @OneToOne(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "category_id", nullable = false, referencedColumnName = "category_id")
     private CourseCategory courseCategory;
 
-    @OneToOne(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
-    private CourseDiscount courseDiscount;
+    @OneToMany(mappedBy = "course",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<CourseDiscount> courseDiscounts = new ArrayList<>();
 
     private String title;
     private String description;
     private Long price;
-    private Long duration;
+    private String img;
+    private String createdDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "level")

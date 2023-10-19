@@ -36,13 +36,16 @@ public class SecurityConfiguration {
         .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
         .authorizeRequests()
         .antMatchers("/register", "/login", "/v3/api-docs/**",
-            "/swagger-ui/**", "/swagger-ui.html", "/actuator/**").permitAll()
+            "/swagger-ui/**", "/swagger-ui.html", "/actuator/**","/payment/**","/courses/**","/items/**" ).permitAll()
         //.antMatchers("/items/addItem", "/courses/addCourse").hasRole(UserRole.INSTRUCTOR.name())
-        .antMatchers("/items/**", "/courses/**").authenticated()
+        .antMatchers("/ordercourses/**","/orderitems").authenticated()
         .anyRequest().authenticated().and()
         .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and().build();
+
+
+
   }
 
 

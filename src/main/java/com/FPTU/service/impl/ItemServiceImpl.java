@@ -42,12 +42,11 @@ public class ItemServiceImpl implements ItemService {
     } else {
       item = itemConverter.toEntity(itemDTO);
     }
-    ItemCategory itemCategory = itemCategoryRepository.getOne(itemDTO.getCategoryId());
+    ItemCategory itemCategory = itemCategoryRepository.getOne(itemDTO.getId());
     item.setItemCategory(itemCategory);
     item = itemRepository.save(item);
     return itemConverter.toDTO(item);
   }
-
   @Override
   public ItemDTO getItemById(Long id) {
     Optional<Item> itemOptional = itemRepository.findById(id);
@@ -65,10 +64,23 @@ public class ItemServiceImpl implements ItemService {
 
   @Override
   public List<ItemDTO> searchItems(String name) {
-    // Use the custom query method to search for items by name
     List<Item> matchingItems = itemRepository.findByNameContainingIgnoreCase(name);
     return matchingItems.stream()
-        .map(itemConverter::toDTO)
-        .collect(Collectors.toList());
+            .map(itemConverter::toDTO)
+            .collect(Collectors.toList());
+  }
+
+  @Override
+  public ItemDTO updateItemById(Long id, ItemDTO itemDTO) {
+    Optional<Item> existingItemOptional = itemRepository.findById(id);
+    if (!existingItemOptional.isPresent()) {
+      return null; // Item with the given ID not found
+    }
+
+    Item existingItem = existingItemOptional.get();
+    existingItem = itemConverter.toEntity(itemDTO, existingItem);
+    existingItem = itemRepository.save(existingItem);
+
+    return itemConverter.toDTO(existingItem);
   }
 }
