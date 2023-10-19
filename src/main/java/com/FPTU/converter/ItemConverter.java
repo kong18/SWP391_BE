@@ -2,10 +2,14 @@ package com.FPTU.converter;
 
 import com.FPTU.dto.ItemDTO;
 import com.FPTU.model.Item;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ItemConverter {
+
+  @Autowired
+  private ItemCategoryConverter itemCategoryConverter;
   public Item toEntity(ItemDTO itemDTO){
     Item item = new Item();
     item.setName(itemDTO.getName());
@@ -21,7 +25,7 @@ public class ItemConverter {
     itemDTO.setDescription(item.getDescription());
     itemDTO.setPrice(item.getPrice());
     itemDTO.setImg(item.getImg());
-    itemDTO.setCategoryId(item.getItemCategory().getCategoryId());
+    itemDTO.setCategory(itemCategoryConverter.toDTO(item.getItemCategory()));
     return itemDTO;
   }
 

@@ -4,8 +4,9 @@ import com.FPTU.converter.CourseConverter;
 import com.FPTU.dto.CourseDTO;
 import com.FPTU.model.Course;
 import com.FPTU.model.CourseCategory;
-import com.FPTU.model.Instructor;
+import com.FPTU.model.User;
 import com.FPTU.repository.*;
+import com.FPTU.service.CommentService;
 import com.FPTU.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,14 +25,18 @@ public class CourseServiceImpl implements CourseService {
     private CourseConverter courseConverter;
     @Autowired
     private CourseCategoryRepository courseCategoryRepository;
-    @Autowired
-    private InstructorRepository instructorRepository;
 
     @Autowired
     private RatingRepository ratingRepository;
 
     @Autowired
     private CourseDetailRepository courseDetailRepository;
+
+    @Autowired
+    private CommentService commentService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public List<CourseDTO> getAllCourses() {
@@ -47,6 +52,7 @@ public class CourseServiceImpl implements CourseService {
                     if(cDTO.getDuration() == null) {
                         cDTO.setDuration(0L);
                     }
+                    cDTO.setComments(commentService.getCommentsByCourseId(cDTO.getId()));
                 })
                 .collect(Collectors.toList());
     }
@@ -64,10 +70,10 @@ public class CourseServiceImpl implements CourseService {
             String formattedDateTime = now.format(formatter);
             course.setCreatedDate(formattedDateTime);
         }
-        CourseCategory courseCategory = courseCategoryRepository.getOne(courseDTO.getCategoryId());
-        Instructor instructor = instructorRepository.getOne(courseDTO.getInstructorId());
+        CourseCategory courseCategory = courseCategoryRepository.getOne(courseDTO.getCategory().getId());
+        User user = userRepository.getOne(courseDTO.getUserId());
         course.setCourseCategory(courseCategory);
-        course.setInstructor(instructor);
+        course.setUser(user);
 
         course = courseRepository.save(course);
         return courseConverter.toDTO(course);
@@ -127,8 +133,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<CourseDTO> findByCustomerId(Long id) {
-        List<Course> courses = courseRepository.findByCustomerId(id);
+    public List<CourseDTO> findAllByUserId_RoleCustomer(Long id) {
+        List<Course> courses = courseRepository.findAllByUserIdRoleCustomer(id);
         return courses.stream()
                 .map(courseConverter::toDTO)
                 .peek(cDTO -> {

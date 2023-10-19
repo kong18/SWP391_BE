@@ -1,21 +1,14 @@
 package com.FPTU.service.impl;
 
-import com.FPTU.converter.CourseDiscountConverter;
 import com.FPTU.converter.RatingConverter;
-import com.FPTU.dto.CourseDiscountDTO;
 import com.FPTU.dto.RatingDTO;
 import com.FPTU.model.*;
-import com.FPTU.repository.CourseDiscountRepository;
 import com.FPTU.repository.CourseRepository;
-import com.FPTU.repository.CustomerRepository;
 import com.FPTU.repository.RatingRepository;
-import com.FPTU.service.CourseDiscountService;
+import com.FPTU.repository.UserRepository;
 import com.FPTU.service.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Service
@@ -27,7 +20,7 @@ public class RatingServiceImpl implements RatingService {
     @Autowired
     private CourseRepository courseRepository;
     @Autowired
-    private CustomerRepository customerRepository;
+    private UserRepository userRepository;
 
     @Override
     public RatingDTO save(RatingDTO ratingDTO) {
@@ -39,9 +32,9 @@ public class RatingServiceImpl implements RatingService {
             rating = ratingConverter.toEntity(ratingDTO);
         }
         Course course = courseRepository.getOne(ratingDTO.getCourseId());
-        Customer customer = customerRepository.getOne(ratingDTO.getCustomerId());
+        User user = userRepository.getOne(ratingDTO.getUserId());
         rating.setCourse(course);
-        rating.setCustomer(customer);
+        rating.setUser(user);
         rating = ratingRepository.save(rating);
         return ratingConverter.toDTO(rating);
     }

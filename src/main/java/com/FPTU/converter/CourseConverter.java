@@ -5,10 +5,16 @@ import com.FPTU.dto.CourseDetailDTO;
 import com.FPTU.model.Course;
 import com.FPTU.model.CourseDetail;
 import com.FPTU.model.CourseLevel;
+import com.FPTU.repository.CourseCategoryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CourseConverter {
+    @Autowired
+    private CourseCategoryConverter courseCategoryConverter;
+
+
     public Course toEntity(CourseDTO courseDTO) {
         Course course = new Course();
         course.setTitle(courseDTO.getTitle());
@@ -32,11 +38,10 @@ public class CourseConverter {
         courseDTO.setTitle(course.getTitle());
         courseDTO.setDescription(course.getDescription());
         courseDTO.setPrice(course.getPrice());
-        courseDTO.setInstructorId(course.getInstructor().getInstructorId());
-        courseDTO.setCategoryId(course.getCourseCategory().getCategoryId());
-        courseDTO.setDuration(course.getDuration());
+        courseDTO.setUserId(course.getUser().getUserId());
         courseDTO.setCreatedDate(course.getCreatedDate());
         courseDTO.setImg(course.getImg());
+        courseDTO.setCategory(courseCategoryConverter.toDTO(course.getCourseCategory()));
         if (course.getLevel().equals(CourseLevel.BEGINNER)) {
             courseDTO.setLevel("BEGINNER");
         }

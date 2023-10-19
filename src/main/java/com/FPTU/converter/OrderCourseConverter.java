@@ -17,7 +17,7 @@ public class OrderCourseConverter {
     public OrderCourseDTO toDTO(OrderCourse orderCourse) {
         OrderCourseDTO orderCourseDTO = new OrderCourseDTO();
         orderCourseDTO.setId(orderCourse.getOrderId());
-        orderCourseDTO.setCustomerId(orderCourse.getCustomer().getCustomerId());
+        orderCourseDTO.setUserId(orderCourse.getUser().getUserId());
         orderCourseDTO.setOrderDate(orderCourse.getOrderDate());
         orderCourseDTO.setTotal(orderCourse.getTotal());
         orderCourseDTO.setStatus(orderCourse.getStatus());

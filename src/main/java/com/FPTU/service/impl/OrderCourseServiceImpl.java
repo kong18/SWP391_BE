@@ -7,7 +7,6 @@ import com.FPTU.dto.OrderCourseDTO;
 import com.FPTU.model.*;
 import com.FPTU.repository.*;
 import com.FPTU.service.CourseDetailService;
-import com.FPTU.service.CustomerService;
 import com.FPTU.service.OrderCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,7 @@ public class OrderCourseServiceImpl implements OrderCourseService {
     @Autowired
     private OrderCourseConverter orderCourseConverter;
     @Autowired
-    private CustomerRepository customerRepository;
+    private UserRepository userRepository;
     @Autowired
     private CourseRepository courseRepository;
 
@@ -54,8 +53,8 @@ public class OrderCourseServiceImpl implements OrderCourseService {
         String formattedDateTime = now.format(formatter);
         orderCourse.setOrderDate(formattedDateTime);
 
-        Customer customer = customerRepository.getOne(orderCourseDTO.getCustomerId());
-        orderCourse.setCustomer(customer);
+        User user = userRepository.getOne(orderCourseDTO.getUserId());
+        orderCourse.setUser(user);
         orderCourse = orderCourseRepository.save(orderCourse);
         for (Long c : orderCourseDTO.getCourseId()) {
             OrderDetailCourse orderDetailCourse = new OrderDetailCourse();

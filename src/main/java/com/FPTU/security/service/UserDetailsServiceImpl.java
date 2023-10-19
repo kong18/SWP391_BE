@@ -28,7 +28,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
   public UserDetails loadUserByUsername(String username) {
 
     final AuthenticatedUserDto authenticatedUser =
-        userService.findAuthenticatedUserByUsername(username);
+            userService.findAuthenticatedUserByUsername(username);
 
     if (Objects.isNull(authenticatedUser)) {
       throw new UsernameNotFoundException(USERNAME_OR_PASSWORD_INVALID);
@@ -40,6 +40,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     final SimpleGrantedAuthority grantedAuthority = new SimpleGrantedAuthority(userRole.name());
 
     return new User(authenticatedUsername, authenticatedPassword,
-        Collections.singletonList(grantedAuthority));
+            Collections.singletonList(grantedAuthority));
   }
 }

@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CommentDTO {
     private Long id;
-    private Long customerId;
+    private UserDTO user;
     private Long courseId;
     private String comment;
 }

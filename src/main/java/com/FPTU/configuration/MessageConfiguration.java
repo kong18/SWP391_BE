@@ -13,7 +13,7 @@ public class MessageConfiguration {
   @Bean
   MessageSource generalMessageSource() {
     final ReloadableResourceBundleMessageSource messageSource =
-        new ReloadableResourceBundleMessageSource();
+            new ReloadableResourceBundleMessageSource();
     messageSource.setBasename("classpath:/messages/general/GeneralMessages");
     messageSource.setDefaultEncoding(ProjectConstants.DEFAULT_ENCODING);
 
@@ -24,7 +24,7 @@ public class MessageConfiguration {
   MessageSource exceptionMessageSource() {
 
     final ReloadableResourceBundleMessageSource messageSource =
-        new ReloadableResourceBundleMessageSource();
+            new ReloadableResourceBundleMessageSource();
     messageSource.setBasename("classpath:/messages/exception/ExceptionMessages");
     messageSource.setDefaultEncoding(ProjectConstants.DEFAULT_ENCODING);
 
@@ -40,7 +40,7 @@ public class MessageConfiguration {
   public MessageSource validationMessageSource() {
 
     final ReloadableResourceBundleMessageSource messageSource =
-        new ReloadableResourceBundleMessageSource();
+            new ReloadableResourceBundleMessageSource();
     messageSource.setBasename("classpath:/messages/validation/ValidationMessages");
     messageSource.setDefaultEncoding(ProjectConstants.DEFAULT_ENCODING);
 

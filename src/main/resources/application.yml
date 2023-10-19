@@ -57,4 +57,12 @@ paypal:
 server:
   port: 8080
 
+google:
+  oauth:
 
+    clientSecret: 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
+
+    redirectUri: http://localhost:8080/login-google
+    tokenEndpoint: https://accounts.google.com/o/oauth2/token
+    userInfoEndpoint: https://www.googleapis.com/oauth2/v1/userinfo?access_token=
+    grantType: authorization_code

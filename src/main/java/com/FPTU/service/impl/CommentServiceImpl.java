@@ -1,18 +1,13 @@
 package com.FPTU.service.impl;
 
 import com.FPTU.converter.CommentConverter;
-import com.FPTU.converter.CourseDiscountConverter;
 import com.FPTU.dto.CommentDTO;
-import com.FPTU.dto.CourseDiscountDTO;
-import com.FPTU.dto.RatingDTO;
 import com.FPTU.model.*;
 import com.FPTU.repository.CommentRepository;
-import com.FPTU.repository.CourseDiscountRepository;
 import com.FPTU.repository.CourseRepository;
-import com.FPTU.repository.CustomerRepository;
+import com.FPTU.repository.UserRepository;
+import com.FPTU.security.mapper.UserMapper;
 import com.FPTU.service.CommentService;
-import com.FPTU.service.CourseDiscountService;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,9 +23,11 @@ public class CommentServiceImpl implements CommentService {
     private CommentConverter commentConverter;
     @Autowired
     private CourseRepository courseRepository;
-    @Autowired
-    private CustomerRepository customerRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    private final UserMapper userMapper = UserMapper.INSTANCE;
 
     @Override
     public CommentDTO save(CommentDTO commentDTO) {
@@ -42,11 +39,24 @@ public class CommentServiceImpl implements CommentService {
             comment = commentConverter.toEntity(commentDTO);
         }
         Course course = courseRepository.getOne(commentDTO.getCourseId());
-        Customer customer = customerRepository.getOne(commentDTO.getCustomerId());
+        User user = userRepository.getOne(commentDTO.getUser().getId());
         comment.setCourse(course);
-        comment.setCustomer(customer);
+        comment.setUser(user);
         comment = commentRepository.save(comment);
         return commentConverter.toDTO(comment);
+    }
+
+    public List<CommentDTO> getCommentsByCourseId(Long id) {
+        List<Comment> comments = commentRepository.findByCourse_CourseId(id);
+        List<CommentDTO> commentDTOS = new ArrayList<>();
+        for ( Comment c: comments) {
+            CommentDTO commentDTO = new CommentDTO();
+            commentDTO.setId(c.getCommentId());
+            commentDTO.setComment(c.getComment());
+            commentDTO.setUser(userMapper.convertToUserDto(c.getUser()));
+            commentDTOS.add(commentDTO);
+        }
+        return  commentDTOS;
     }
 
 
