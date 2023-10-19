@@ -52,6 +52,4 @@ public class Course {
     @Enumerated(EnumType.STRING)
     @Column(name = "level")
     private CourseLevel level;
-
-
 }

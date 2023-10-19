@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
-
 @Controller
 @RestController
 @RequestMapping("/payment")
@@ -49,7 +48,7 @@ public class PaymentController {
 
             for (Links links : payment.getLinks()) {
                 if (links.getRel().equals("approval_url")) {
-                    return "redirect:" + links.getHref();
+                    return links.getHref();
                 }
             }
         } catch (PayPalRESTException e) {

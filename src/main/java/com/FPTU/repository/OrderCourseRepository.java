@@ -1,6 +1,7 @@
 package com.FPTU.repository;
 
-
+import com.FPTU.dto.OrderCourseDTO;
+import com.FPTU.model.CourseDetail;
 import com.FPTU.model.OrderCourse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
