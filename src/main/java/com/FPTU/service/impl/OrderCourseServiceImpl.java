@@ -1,8 +1,6 @@
 package com.FPTU.service.impl;
 
-import com.FPTU.converter.CourseDetailConverter;
 import com.FPTU.converter.OrderCourseConverter;
-import com.FPTU.dto.CourseDetailDTO;
 import com.FPTU.dto.OrderCourseDTO;
 import com.FPTU.model.*;
 import com.FPTU.repository.*;
