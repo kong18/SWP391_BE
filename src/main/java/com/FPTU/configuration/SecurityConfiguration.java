@@ -43,6 +43,9 @@ public class SecurityConfiguration {
         .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and().build();
+
+
+
   }
 
 

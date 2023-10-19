@@ -1,27 +1,59 @@
 package com.FPTU.controller;
 
 import com.FPTU.dto.CourseDetailDTO;
+import com.FPTU.exceptions.CourseDetailNotFoundException;
+import com.FPTU.exceptions.CourseNotFoundException;
 import com.FPTU.service.CourseDetailService;
+import com.FPTU.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
-@RequestMapping("/course")
+@RequestMapping("/coursedetail")
+@CrossOrigin("http://127.0.0.1:5173/")
 public class CourseDetailController {
     @Autowired
     private CourseDetailService courseDetailService;
+    @Autowired
+    private CourseService courseService;
 
-    @PostMapping("/detail")
+    @GetMapping("/{course_id}")
+    public List<CourseDetailDTO> getCourseDetailByCourseId(@PathVariable("course_id") Long courseId) {
+        if(!courseService.existsById(courseId)) {
+            throw new CourseNotFoundException(courseId);
+        }
+        return courseDetailService.findAllByCourseId(courseId);
+    }
+
+    @PreAuthorize("hasRole('INSTRUCTOR')")
+    @PostMapping()
     public ResponseEntity<CourseDetailDTO> addCourseDetail(@RequestBody CourseDetailDTO courseDetailDTO) {
         courseDetailDTO = courseDetailService.save(courseDetailDTO);
         return  ResponseEntity.ok(courseDetailDTO);
     }
-    @PutMapping("detail/{id}")
+    @PreAuthorize("hasRole('INSTRUCTOR')")
+    @PutMapping("/{id}")
     public ResponseEntity<CourseDetailDTO> updateCourseDetail(@RequestBody CourseDetailDTO courseDetailDTO, @PathVariable("id") Long id) {
+        if(!courseDetailService.existsById(id)) {
+            throw new CourseDetailNotFoundException(id);
+        }
         courseDetailDTO.setId(id);
         courseDetailService.save(courseDetailDTO);
         return ResponseEntity.ok(courseDetailDTO);
     }
+    @PreAuthorize("hasRole('INSTRUCTOR')")
+    @DeleteMapping("/{id}")
+    public String deleteDetail(@PathVariable("id") Long id) {
+        if(!courseDetailService.existsById(id)) {
+            throw new CourseDetailNotFoundException(id);
+        }
+        courseDetailService.deleteById(id);
+        return "Delete the course's detail by id " + id;
+    }
+
 }

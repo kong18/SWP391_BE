@@ -19,7 +19,6 @@ public class CommentConverter {
         CommentDTO commentDTO = new CommentDTO();
         commentDTO.setId(comment.getCommentId());
         commentDTO.setCourseId(comment.getCourse().getCourseId());
-        commentDTO.setCustomerId(comment.getCustomer().getCustomerId());
         commentDTO.setComment(comment.getComment());
         return commentDTO;
     }

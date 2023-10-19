@@ -23,8 +23,8 @@ public class OrderCourse {
     private Long orderId;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
-    private Customer customer;
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    private User user;
 
     @OneToMany(mappedBy = "orderCourse",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OrderDetailCourse> orderDetailCourses = new ArrayList<>();

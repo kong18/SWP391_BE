@@ -23,5 +23,5 @@ public interface CourseService {
 
     List<CourseDTO> findByName(String title);
 
-    List<CourseDTO> findByCustomerId(Long id);
+    List<CourseDTO> findAllByUserId_RoleCustomer(Long id);
 }

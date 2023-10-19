@@ -22,8 +22,8 @@ public class OrderItem {
     private Long orderId;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false, referencedColumnName = "customer_id")
-    private Customer customer;
+    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "user_id")
+    private User user;
 
     @OneToMany(mappedBy = "orderItem",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OrderDetailItem> orderDetailItems = new ArrayList<>();

@@ -30,6 +30,6 @@ public class Comment {
 
     @ManyToOne()
     @JsonIgnore
-    @JoinColumn(name = "customer_id", nullable = false, referencedColumnName = "customer_id")
-    private Customer customer;
+    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "user_id")
+    private User user;
 }

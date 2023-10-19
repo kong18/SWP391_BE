@@ -35,19 +35,18 @@ public class ItemServiceImpl implements ItemService {
 
   @Override
   public ItemDTO save(ItemDTO itemDTO) {
-    Item item;
+    Item item = new Item();
     if (itemDTO.getId() != null) {
       Item oldItem = itemRepository.getOne(itemDTO.getId());
       item = itemConverter.toEntity(itemDTO, oldItem);
     } else {
       item = itemConverter.toEntity(itemDTO);
     }
-    ItemCategory itemCategory = itemCategoryRepository.getOne(itemDTO.getCategoryId());
+    ItemCategory itemCategory = itemCategoryRepository.getOne(itemDTO.getId());
     item.setItemCategory(itemCategory);
     item = itemRepository.save(item);
     return itemConverter.toDTO(item);
   }
-
   @Override
   public ItemDTO getItemById(Long id) {
     Optional<Item> itemOptional = itemRepository.findById(id);

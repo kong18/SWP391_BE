@@ -4,7 +4,6 @@ import com.FPTU.converter.CourseDiscountConverter;
 import com.FPTU.dto.CourseDiscountDTO;
 import com.FPTU.model.Course;
 import com.FPTU.model.CourseDiscount;
-import com.FPTU.model.Instructor;
 import com.FPTU.repository.CourseDiscountRepository;
 import com.FPTU.repository.CourseRepository;
 import com.FPTU.service.CourseDiscountService;

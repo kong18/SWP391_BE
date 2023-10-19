@@ -1,5 +1,6 @@
 package com.FPTU.dto;
 
+import com.FPTU.model.ItemCategory;
 import lombok.*;
 
 @Getter
@@ -11,6 +12,6 @@ public class ItemDTO {
   private String name;
   private String description;
   private Long price;
-  private Long categoryId;
+  private ItemCategoryDTO category;
   private String img;
 }
