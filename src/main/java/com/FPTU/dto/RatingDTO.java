@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RatingDTO {
     private Long id;
-    private Long customerId;
+    private Long userId;
     private Long courseId;
     private Long rating;
 }

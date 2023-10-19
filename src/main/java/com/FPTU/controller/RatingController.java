@@ -5,6 +5,7 @@ import com.FPTU.dto.CourseDiscountDTO;
 import com.FPTU.dto.RatingDTO;
 import com.FPTU.service.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,9 +17,9 @@ public class RatingController {
     private RatingService ratingService;
 
     @PostMapping()
-    public ResponseEntity<RatingDTO> addCourse(@RequestBody RatingDTO ratingDTO) {
-        ratingDTO = ratingService.save(ratingDTO);
-        return  ResponseEntity.ok(ratingDTO);
+    public ResponseEntity<String> addRating(@RequestBody RatingDTO ratingDTO) {
+        ratingService.save(ratingDTO);
+        return  ResponseEntity.status(HttpStatus.CREATED).body("Rating added successfully");
     }
 
 }

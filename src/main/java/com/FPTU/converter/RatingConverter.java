@@ -16,7 +16,7 @@ public class RatingConverter {
         RatingDTO ratingDTO = new RatingDTO();
         ratingDTO.setId(rating.getRatingId());
         ratingDTO.setCourseId(rating.getCourse().getCourseId());
-        ratingDTO.setCustomerId(rating.getCustomer().getCustomerId());
+        ratingDTO.setUserId(rating.getUser().getUserId());
         ratingDTO.setRating(rating.getRating());
         return ratingDTO;
     }

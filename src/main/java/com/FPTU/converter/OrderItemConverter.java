@@ -20,7 +20,7 @@ public class OrderItemConverter {
     public OrderItemDTO toDTO(OrderItem orderItem) {
         OrderItemDTO orderItemDTO = new OrderItemDTO();
         orderItemDTO.setId(orderItem.getOrderId());
-        orderItemDTO.setCustomerId(orderItem.getCustomer().getCustomerId());
+        orderItemDTO.setUserId(orderItem.getUser().getUserId());
         orderItemDTO.setOrderDate(orderItem.getOrderDate());
         orderItemDTO.setTotal(orderItem.getTotal());
         orderItemDTO.setStatus(orderItem.getStatus().toString());

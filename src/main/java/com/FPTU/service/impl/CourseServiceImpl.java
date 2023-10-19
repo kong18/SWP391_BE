@@ -1,11 +1,10 @@
 package com.FPTU.service.impl;
 
-import com.FPTU.converter.CommentConverter;
 import com.FPTU.converter.CourseConverter;
 import com.FPTU.dto.CourseDTO;
 import com.FPTU.model.Course;
 import com.FPTU.model.CourseCategory;
-import com.FPTU.model.Instructor;
+import com.FPTU.model.User;
 import com.FPTU.repository.*;
 import com.FPTU.service.CommentService;
 import com.FPTU.service.CourseService;
@@ -26,8 +25,6 @@ public class CourseServiceImpl implements CourseService {
     private CourseConverter courseConverter;
     @Autowired
     private CourseCategoryRepository courseCategoryRepository;
-    @Autowired
-    private InstructorRepository instructorRepository;
 
     @Autowired
     private RatingRepository ratingRepository;
@@ -37,6 +34,9 @@ public class CourseServiceImpl implements CourseService {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public List<CourseDTO> getAllCourses() {
@@ -71,9 +71,9 @@ public class CourseServiceImpl implements CourseService {
             course.setCreatedDate(formattedDateTime);
         }
         CourseCategory courseCategory = courseCategoryRepository.getOne(courseDTO.getCategory().getId());
-        Instructor instructor = instructorRepository.getOne(courseDTO.getInstructorId());
+        User user = userRepository.getOne(courseDTO.getUserId());
         course.setCourseCategory(courseCategory);
-        course.setInstructor(instructor);
+        course.setUser(user);
 
         course = courseRepository.save(course);
         return courseConverter.toDTO(course);
@@ -133,8 +133,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<CourseDTO> findByCustomerId(Long id) {
-        List<Course> courses = courseRepository.findByCustomerId(id);
+    public List<CourseDTO> findAllByUserId_RoleCustomer(Long id) {
+        List<Course> courses = courseRepository.findAllByUserIdRoleCustomer(id);
         return courses.stream()
                 .map(courseConverter::toDTO)
                 .peek(cDTO -> {

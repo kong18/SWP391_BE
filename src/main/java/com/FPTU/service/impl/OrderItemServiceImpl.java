@@ -25,7 +25,7 @@ public class OrderItemServiceImpl implements OrderItemService {
     @Autowired
     private OrderItemConverter orderItemConverter;
     @Autowired
-    private CustomerRepository customerRepository;
+    private UserRepository userRepository;
     @Autowired
     private ItemRepository itemRepository;
 
@@ -53,8 +53,8 @@ public class OrderItemServiceImpl implements OrderItemService {
         String formattedDateTime = now.format(formatter);
         orderItem.setOrderDate(formattedDateTime);
 
-        Customer customer = customerRepository.getOne(orderItemDTO.getCustomerId());
-        orderItem.setCustomer(customer);
+        User user = userRepository.getOne(orderItemDTO.getUserId());
+        orderItem.setUser(user);
         orderItem = orderItemRepository.save(orderItem);
         for (Long c : orderItemDTO.getItemId()) {
             OrderDetailItem orderDetailItem = new OrderDetailItem();

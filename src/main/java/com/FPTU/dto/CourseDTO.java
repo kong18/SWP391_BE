@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 public class CourseDTO {
     private Long id;
-    private Long instructorId;
+    private Long userId;
     private String title;
     private String description;
     private Long price;

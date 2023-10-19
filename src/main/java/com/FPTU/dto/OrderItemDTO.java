@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class OrderItemDTO {
     private Long id;
-    private Long customerId;
+    private Long userId;
     private Long total;
     private String orderDate;
     private Long[] itemId;

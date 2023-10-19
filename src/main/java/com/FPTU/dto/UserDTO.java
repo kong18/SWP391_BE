@@ -1,6 +1,5 @@
 package com.FPTU.dto;
 
-import com.FPTU.model.UserRole;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,17 +7,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AuthenticatedUserDto {
+public class UserDTO {
 
   private Long id;
 
   private String name;
-
-  private String username;
-
-  private String password;
-
-  private UserRole userRole;
 
   private String img;
 

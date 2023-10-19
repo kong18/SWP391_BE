@@ -33,9 +33,9 @@ public class CourseController {
         return courseService.findById(id);
     }
 
-    @GetMapping("/customer/{id}")
-    public List<CourseDTO> getCourseByCustomerId(@PathVariable("id") Long id) {
-        return courseService.findByCustomerId(id);
+    @GetMapping("/user/{id}")
+    public List<CourseDTO> findAllByUserId_RoleCustomer(@PathVariable("id") Long id) {
+        return courseService.findAllByUserId_RoleCustomer(id);
     }
 
     @GetMapping("/category/{id}")

@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 public class OrderCourseDTO {
     private Long id;
-    private Long customerId;
+    private Long userId;
     private Long total;
     private String orderDate;
     private Long[] courseId;

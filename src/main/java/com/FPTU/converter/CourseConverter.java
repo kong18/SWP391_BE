@@ -38,8 +38,7 @@ public class CourseConverter {
         courseDTO.setTitle(course.getTitle());
         courseDTO.setDescription(course.getDescription());
         courseDTO.setPrice(course.getPrice());
-        courseDTO.setInstructorId(course.getInstructor().getInstructorId());
-        courseDTO.setDuration(course.getDuration());
+        courseDTO.setUserId(course.getUser().getUserId());
         courseDTO.setCreatedDate(course.getCreatedDate());
         courseDTO.setImg(course.getImg());
         courseDTO.setCategory(courseCategoryConverter.toDTO(course.getCourseCategory()));
