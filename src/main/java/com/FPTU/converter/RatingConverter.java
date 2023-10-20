@@ -1,7 +1,5 @@
 package com.FPTU.converter;
-import com.FPTU.dto.CourseDetailDTO;
 import com.FPTU.dto.RatingDTO;
-import com.FPTU.model.CourseDetail;
 import com.FPTU.model.Rating;
 import org.springframework.stereotype.Component;
 

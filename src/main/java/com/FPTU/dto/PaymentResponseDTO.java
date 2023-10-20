@@ -9,9 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RatingDTO {
-    private Long id;
-    private Long userId;
-    private Long courseId;
-    private Long rating;
+public class PaymentResponseDTO {
+    private String paymentId;
+    private String status;
 }

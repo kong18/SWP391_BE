@@ -1,8 +1,6 @@
 package com.FPTU.controller;
 
 
-import com.FPTU.dto.CourseCategoryDTO;
-import com.FPTU.dto.CourseDTO;
 import com.FPTU.dto.CourseDiscountDTO;
 import com.FPTU.service.CourseDiscountService;
 import org.springframework.beans.factory.annotation.Autowired;

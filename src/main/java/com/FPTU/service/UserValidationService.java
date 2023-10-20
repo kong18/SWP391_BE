@@ -4,10 +4,11 @@ import com.FPTU.exceptions.RegistrationException;
 import com.FPTU.repository.UserRepository;
 import com.FPTU.security.dto.RegistrationRequest;
 import com.FPTU.utils.ExceptionMessageAccessor;
-import java.util.Locale;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+
+import java.util.Locale;
 
 @Log4j2
 @Service

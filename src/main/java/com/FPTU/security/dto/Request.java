@@ -1,10 +1,11 @@
 package com.FPTU.security.dto;
 
-import java.util.Locale;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.Locale;
 
 /**
  * Request common class.

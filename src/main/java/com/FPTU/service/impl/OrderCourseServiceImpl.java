@@ -2,9 +2,13 @@ package com.FPTU.service.impl;
 
 import com.FPTU.converter.OrderCourseConverter;
 import com.FPTU.dto.OrderCourseDTO;
-import com.FPTU.model.*;
-import com.FPTU.repository.*;
-import com.FPTU.service.CourseDetailService;
+import com.FPTU.model.OrderCourse;
+import com.FPTU.model.OrderDetailCourse;
+import com.FPTU.model.User;
+import com.FPTU.repository.CourseRepository;
+import com.FPTU.repository.OrderCourseRepository;
+import com.FPTU.repository.OrderDetailCourseRepository;
+import com.FPTU.repository.UserRepository;
 import com.FPTU.service.OrderCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

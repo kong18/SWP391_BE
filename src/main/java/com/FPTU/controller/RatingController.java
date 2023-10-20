@@ -1,7 +1,6 @@
 package com.FPTU.controller;
 
 
-import com.FPTU.dto.CourseDiscountDTO;
 import com.FPTU.dto.RatingDTO;
 import com.FPTU.service.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;

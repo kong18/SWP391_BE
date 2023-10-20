@@ -1,13 +1,12 @@
 package com.FPTU.security.dto;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-
-import com.FPTU.model.UserRole;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 
 @Getter
 @Setter

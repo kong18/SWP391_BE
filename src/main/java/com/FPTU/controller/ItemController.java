@@ -1,8 +1,6 @@
 package com.FPTU.controller;
 
-import com.FPTU.dto.CourseDTO;
 import com.FPTU.dto.ItemDTO;
-import com.FPTU.exceptions.CourseNotFoundException;
 import com.FPTU.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +24,7 @@ public class ItemController {
 
     @GetMapping("/{id}")
     public ItemDTO getItemById(@PathVariable("id") Long id) {
+
         return itemService.getItemById(id);
     }
 
@@ -35,6 +34,7 @@ public class ItemController {
         itemDTO = itemService.save(itemDTO);
         return ResponseEntity.ok(itemDTO);
     }
+
     @PreAuthorize("hasRole('INSTRUCTOR')")
     @PutMapping
     public ResponseEntity<ItemDTO> updateItem(@RequestBody ItemDTO itemDTO, @PathVariable("id") Long id) {
@@ -51,10 +51,10 @@ public class ItemController {
             return ResponseEntity.notFound().build();
         }
     }
+
     @GetMapping("/search")
     public List<ItemDTO> searchItems(
-            @RequestParam(value = "name", required = false) String name)
-    {
+            @RequestParam(value = "name", required = false) String name) {
         return itemService.searchItems(name);
     }
 

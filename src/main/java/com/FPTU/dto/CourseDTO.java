@@ -1,7 +1,5 @@
 package com.FPTU.dto;
 
-import com.FPTU.model.Comment;
-import com.FPTU.model.CourseCategory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

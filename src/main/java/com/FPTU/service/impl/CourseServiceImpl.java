@@ -45,11 +45,11 @@ public class CourseServiceImpl implements CourseService {
                 .map(courseConverter::toDTO)
                 .peek(cDTO -> {
                     cDTO.setRating(ratingRepository.findAverageRating(cDTO.getId()));
-                    if(cDTO.getRating() == null) {
+                    if (cDTO.getRating() == null) {
                         cDTO.setRating(0.0);
                     }
                     cDTO.setDuration(courseDetailRepository.getSumEstimatedTimeByCourseId(cDTO.getId()));
-                    if(cDTO.getDuration() == null) {
+                    if (cDTO.getDuration() == null) {
                         cDTO.setDuration(0L);
                     }
                     cDTO.setComments(commentService.getCommentsByCourseId(cDTO.getId()));
@@ -86,11 +86,11 @@ public class CourseServiceImpl implements CourseService {
                 .map(courseConverter::toDTO)
                 .peek(cDTO -> {
                     cDTO.setRating(ratingRepository.findAverageRating(cDTO.getId()));
-                    if(cDTO.getRating() == null) {
+                    if (cDTO.getRating() == null) {
                         cDTO.setRating(0.0);
                     }
                     cDTO.setDuration(courseDetailRepository.getSumEstimatedTimeByCourseId(cDTO.getId()));
-                    if(cDTO.getDuration() == null) {
+                    if (cDTO.getDuration() == null) {
                         cDTO.setDuration(0L);
                     }
                 })
@@ -121,11 +121,11 @@ public class CourseServiceImpl implements CourseService {
                 .map(courseConverter::toDTO)
                 .peek(cDTO -> {
                     cDTO.setRating(ratingRepository.findAverageRating(cDTO.getId()));
-                    if(cDTO.getRating() == null) {
+                    if (cDTO.getRating() == null) {
                         cDTO.setRating(0.0);
                     }
                     cDTO.setDuration(courseDetailRepository.getSumEstimatedTimeByCourseId(cDTO.getId()));
-                    if(cDTO.getDuration() == null) {
+                    if (cDTO.getDuration() == null) {
                         cDTO.setDuration(0L);
                     }
                 })
@@ -139,11 +139,11 @@ public class CourseServiceImpl implements CourseService {
                 .map(courseConverter::toDTO)
                 .peek(cDTO -> {
                     cDTO.setRating(ratingRepository.findAverageRating(cDTO.getId()));
-                    if(cDTO.getRating() == null) {
+                    if (cDTO.getRating() == null) {
                         cDTO.setRating(0.0);
                     }
                     cDTO.setDuration(courseDetailRepository.getSumEstimatedTimeByCourseId(cDTO.getId()));
-                    if(cDTO.getDuration() == null) {
+                    if (cDTO.getDuration() == null) {
                         cDTO.setDuration(0L);
                     }
                 })

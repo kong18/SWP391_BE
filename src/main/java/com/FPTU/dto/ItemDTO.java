@@ -1,7 +1,9 @@
 package com.FPTU.dto;
 
-import com.FPTU.model.ItemCategory;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter

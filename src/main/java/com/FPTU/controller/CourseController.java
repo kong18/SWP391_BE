@@ -1,10 +1,7 @@
 package com.FPTU.controller;
 
 import com.FPTU.dto.CourseDTO;
-import com.FPTU.dto.CourseDetailDTO;
-import com.FPTU.exceptions.CourseDetailNotFoundException;
 import com.FPTU.exceptions.CourseNotFoundException;
-import com.FPTU.model.Course;
 import com.FPTU.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -73,5 +70,7 @@ public class CourseController {
         courseService.deleteById(id);
         return "Delete the course by id " + id;
     }
+
+
 
 }

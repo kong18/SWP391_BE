@@ -2,7 +2,9 @@ package com.FPTU.service.impl;
 
 import com.FPTU.converter.RatingConverter;
 import com.FPTU.dto.RatingDTO;
-import com.FPTU.model.*;
+import com.FPTU.model.Course;
+import com.FPTU.model.Rating;
+import com.FPTU.model.User;
 import com.FPTU.repository.CourseRepository;
 import com.FPTU.repository.RatingRepository;
 import com.FPTU.repository.UserRepository;

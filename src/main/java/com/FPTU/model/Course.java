@@ -1,10 +1,14 @@
 package com.FPTU.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -52,4 +56,6 @@ public class Course {
     @Enumerated(EnumType.STRING)
     @Column(name = "level")
     private CourseLevel level;
+
+
 }

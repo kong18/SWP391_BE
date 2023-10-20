@@ -1,14 +1,18 @@
 package com.FPTU.service.impl;
 
-import com.FPTU.converter.OrderCourseConverter;
 import com.FPTU.converter.OrderItemConverter;
-import com.FPTU.dto.OrderCourseDTO;
 import com.FPTU.dto.OrderItemDTO;
-import com.FPTU.model.*;
-import com.FPTU.repository.*;
-import com.FPTU.service.OrderCourseService;
+import com.FPTU.model.OrderDetailItem;
+import com.FPTU.model.OrderItem;
+import com.FPTU.model.Status;
+import com.FPTU.model.User;
+import com.FPTU.repository.ItemRepository;
+import com.FPTU.repository.OrderDetailItemRepository;
+import com.FPTU.repository.OrderItemRepository;
+import com.FPTU.repository.UserRepository;
 import com.FPTU.service.OrderItemService;
-import org.hibernate.criterion.Order;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,9 +21,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import static com.mysql.cj.conf.PropertyKey.logger;
 
 @Service
 

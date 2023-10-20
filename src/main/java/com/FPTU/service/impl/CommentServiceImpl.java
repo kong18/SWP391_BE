@@ -2,7 +2,9 @@ package com.FPTU.service.impl;
 
 import com.FPTU.converter.CommentConverter;
 import com.FPTU.dto.CommentDTO;
-import com.FPTU.model.*;
+import com.FPTU.model.Comment;
+import com.FPTU.model.Course;
+import com.FPTU.model.User;
 import com.FPTU.repository.CommentRepository;
 import com.FPTU.repository.CourseRepository;
 import com.FPTU.repository.UserRepository;

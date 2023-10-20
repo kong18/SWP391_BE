@@ -2,11 +2,8 @@ package com.FPTU.service;
 
 
 import com.FPTU.dto.CourseDTO;
-import com.FPTU.model.Course;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
-import java.util.Optional;
 
 
 public interface CourseService {

@@ -38,13 +38,14 @@ dependencies {
     implementation("com.paypal.sdk:rest-api-sdk:1.4.1")
     implementation ("com.stripe:stripe-java:22.0.0")
     implementation ("com.google.api-client:google-api-client:1.30.10")
-
+    implementation("com.cloudinary:cloudinary-http44:1.35.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test:2.7.10")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.4.2")
     compileOnly("org.projectlombok:lombok:1.18.26")
     annotationProcessor("org.projectlombok:lombok:1.18.26")
     annotationProcessor("org.mapstruct:mapstruct-processor:1.5.3.Final")
+
 }
 
 configurations {
@@ -76,9 +77,9 @@ checkstyle {
 
 }*/
 
-group = "com.FPT"
+group = "com.FPTU"
 version = "1.0.0"
-description = "DrawingCourseSelling"
+description = "DrawingCourseSellingWeb"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 publishing {

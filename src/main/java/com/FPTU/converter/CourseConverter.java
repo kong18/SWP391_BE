@@ -1,11 +1,8 @@
 package com.FPTU.converter;
 
 import com.FPTU.dto.CourseDTO;
-import com.FPTU.dto.CourseDetailDTO;
 import com.FPTU.model.Course;
-import com.FPTU.model.CourseDetail;
 import com.FPTU.model.CourseLevel;
-import com.FPTU.repository.CourseCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

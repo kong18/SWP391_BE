@@ -1,9 +1,10 @@
 package com.FPTU.security.dto;
 
-import javax.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.validation.constraints.NotEmpty;
 
 @Getter
 @Setter

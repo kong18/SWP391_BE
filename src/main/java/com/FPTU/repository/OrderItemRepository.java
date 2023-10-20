@@ -1,6 +1,5 @@
 package com.FPTU.repository;
 
-import com.FPTU.model.OrderCourse;
 import com.FPTU.model.OrderItem;
 import com.FPTU.model.Status;
 import org.springframework.data.jpa.repository.JpaRepository;

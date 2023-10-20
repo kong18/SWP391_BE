@@ -1,8 +1,6 @@
 package com.FPTU.configuration;
 
 
-import static io.swagger.v3.oas.models.security.SecurityScheme.Type.HTTP;
-
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
@@ -15,6 +13,8 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import static io.swagger.v3.oas.models.security.SecurityScheme.Type.HTTP;
 
 @Getter
 @Setter
