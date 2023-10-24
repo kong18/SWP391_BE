@@ -22,6 +22,7 @@ public class CourseDetailController {
     @Autowired
     private CourseService courseService;
 
+    @PreAuthorize("hasRole('INSTRUCTOR')")
     @GetMapping("/{course_id}")
     public List<CourseDetailDTO> getCourseDetailByCourseId(@PathVariable("course_id") Long courseId) {
         if(!courseService.existsById(courseId)) {

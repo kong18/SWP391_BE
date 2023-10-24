@@ -21,13 +21,13 @@ public class OrderItemController {
         return orderItemService.findAll();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+
     @GetMapping("/{id}")
     public OrderItemDTO findOrderItemById(@PathVariable("id") Long id) {
         return orderItemService.findById(id);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+
     @PostMapping()
     public OrderItemDTO addOrderItem(@RequestBody OrderItemDTO orderItemDTO) {
         return orderItemService.save(orderItemDTO);

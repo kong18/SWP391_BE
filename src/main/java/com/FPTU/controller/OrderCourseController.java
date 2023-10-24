@@ -22,13 +22,13 @@ public class OrderCourseController {
         return orderCourseService.findAll();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+
     @GetMapping("/{id}")
     public OrderCourseDTO findOrderCourseById(@PathVariable("id") Long id) {
         return orderCourseService.findById(id);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+
     @PostMapping()
     public OrderCourseDTO addOrderCourse(@RequestBody OrderCourseDTO orderCourseDTO) {
         return orderCourseService.save(orderCourseDTO);

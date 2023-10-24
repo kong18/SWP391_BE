@@ -1,57 +1,80 @@
 package com.FPTU.controller;
 
-import com.FPTU.dto.PaymentRequestDTO;
-import com.FPTU.dto.PaymentResponseDTO;
+import javax.servlet.http.HttpServletRequest;
+
+import com.FPTU.model.PaypalPaymentIntent;
+import com.FPTU.model.PaypalPaymentMethod;
 import com.FPTU.service.PaypalService;
+import com.FPTU.utils.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
+@Controller
 @RestController
-@RequestMapping("/payments")
+@RequestMapping("/payment")
 public class PaymentController {
+    public static final String URL_PAYPAL_SUCCESS = "pay/success";
+    public static final String URL_PAYPAL_CANCEL = "pay/cancel";
+
+    public static final String FRONTEND_URL = "http://127.0.0.1:5173/";
+
+    private Logger log = LoggerFactory.getLogger(getClass());
+
     @Autowired
     private PaypalService paypalService;
 
-    @PostMapping("/create")
-    public ResponseEntity<PaymentResponseDTO> createPayment(@RequestBody PaymentRequestDTO paymentRequest) {
-        try {
-            Payment payment = paypalService.createPayment(paymentRequest);
-
-            PaymentResponseDTO paymentResponse = new PaymentResponseDTO();
-            paymentResponse.setPaymentId(payment.getId());
-            paymentResponse.setStatus(payment.getState());
-
-            return new ResponseEntity<>(paymentResponse, HttpStatus.OK);
-        } catch (PayPalRESTException e) {
-            // Handle PayPal payment creation error
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @GetMapping("/")
+    public String index() {
+        return "index";
     }
 
-    @GetMapping("/execute")
-    public ResponseEntity<String> executePayment(@RequestParam("paymentId") String paymentId, @RequestParam("payerId") String payerId) {
+    @PostMapping("/pay")
+    public String pay(HttpServletRequest request, @RequestParam("price") double price) {
+        String cancelUrl = FRONTEND_URL + URL_PAYPAL_CANCEL;
+        String successUrl = FRONTEND_URL + URL_PAYPAL_SUCCESS;
+
         try {
-            Payment payment = paypalService.executePayment(paymentId, payerId);
-            if ("approved".equalsIgnoreCase(payment.getState())) {
-                // Handle successful payment confirmation
-                return new ResponseEntity<>("Payment successful", HttpStatus.OK);
-            } else {
-                // Handle payment not approved
-                return new ResponseEntity<>("Payment not approved", HttpStatus.BAD_REQUEST);
+            Payment payment = paypalService.createPayment(
+                    price,
+                    "USD",
+                    PaypalPaymentMethod.paypal,
+                    PaypalPaymentIntent.sale,
+                    "payment description",
+                    cancelUrl,
+                    successUrl
+            );
+
+            for (Links links : payment.getLinks()) {
+                if (links.getRel().equals("approval_url")) {
+                    return links.getHref();
+                }
             }
         } catch (PayPalRESTException e) {
-            // Handle PayPal payment execution error
-            return new ResponseEntity<>("Failed to execute payment: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error(e.getMessage());
         }
+        return "redirect:/";
     }
 
-    @GetMapping("/cancel")
-    public ResponseEntity<String> cancel() {
-        // Handle canceled payment
-        return new ResponseEntity<>("Payment canceled", HttpStatus.OK);
+    @GetMapping(URL_PAYPAL_CANCEL)
+    public String cancelPay() {
+        return "cancel";
+    }
+
+    @GetMapping(URL_PAYPAL_SUCCESS)
+    public String successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) {
+        try {
+            Payment payment = paypalService.executePayment(paymentId, payerId);
+            if (payment.getState().equals("approved")) {
+                return "success";
+            }
+        } catch (PayPalRESTException e) {
+            log.error(e.getMessage());
+        }
+        return "redirect:/";
     }
 }

@@ -11,10 +11,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class OrderCourseDTO {
     private Long id;
-    private Long userId;
+    private UserDTO user;
     private Long total;
     private String orderDate;
-    private Long[] courseId;
+    private List<CourseDTO> courses;
     private String status;
     private String paymentMethod;
 }

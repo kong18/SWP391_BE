@@ -41,7 +41,7 @@ public class CommentServiceImpl implements CommentService {
             comment = commentConverter.toEntity(commentDTO);
         }
         Course course = courseRepository.getOne(commentDTO.getCourseId());
-        User user = userRepository.getOne(commentDTO.getUser().getId());
+        User user = userRepository.findByUsername(commentDTO.getUser().getUsername());
         comment.setCourse(course);
         comment.setUser(user);
         comment = commentRepository.save(comment);
