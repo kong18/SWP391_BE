@@ -1,6 +1,7 @@
 package com.FPTU.controller;
 
 import com.FPTU.dto.AuthenticatedUserDto;
+import com.FPTU.model.ChangePasswordRequest;
 import com.FPTU.model.User;
 import com.FPTU.repository.UserRepository;
 import com.FPTU.security.dto.UserResponse;
@@ -12,6 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,7 +31,8 @@ public class UserController {
   private final UserService userService;
   private final UserMapper userMapper = UserMapper.INSTANCE;
   private final Cloudinary cloudinary;  // Inject the Cloudinary bean
-
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
   @GetMapping(path = "/{username}")
   public ResponseEntity<UserResponse> findUserByUsername(@PathVariable String username) {
@@ -56,11 +61,31 @@ public class UserController {
       repo.save(user);
 
 
-
       return ResponseEntity.status(HttpStatus.CREATED).body("Upload successful");
     } else {
       // Handle the case where the file upload to Cloudinary failed
       return new ResponseEntity<>("Failed to upload the image", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @PostMapping("/change-password")
+  public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String username = authentication.getName();
+
+    // Load the user from the database
+    User user = userService.findByUsername(username);
+
+    // Verify the old password
+    if (passwordEncoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())) {
+      // Update the password with the new one
+      user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
+      // Save the updated user
+      userService.updateUser(user);
+
+      return new ResponseEntity<>("Password changed successfully", HttpStatus.OK);
+    } else {
+      return new ResponseEntity<>("Incorrect old password", HttpStatus.BAD_REQUEST);
     }
   }
 }

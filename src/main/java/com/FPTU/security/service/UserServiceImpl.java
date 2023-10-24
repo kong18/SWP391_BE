@@ -75,4 +75,12 @@ public class UserServiceImpl implements UserService {
 
     return userMapper.convertToAuthenticatedUserDto(user);
   }
+
+  @Override
+  public void updateUser(User user) {
+    userRepository.save(user);
+
+  }
+
+
 }
