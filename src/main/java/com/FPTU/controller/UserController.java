@@ -9,6 +9,7 @@ import com.FPTU.security.service.UserService;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -27,6 +28,7 @@ public class UserController {
   private final UserMapper userMapper = UserMapper.INSTANCE;
   private final Cloudinary cloudinary;  // Inject the Cloudinary bean
 
+
   @GetMapping(path = "/{username}")
   public ResponseEntity<UserResponse> findUserByUsername(@PathVariable String username) {
     final User user = userService.findByUsername(username);
@@ -34,8 +36,9 @@ public class UserController {
     return ResponseEntity.ok(new UserResponse(userDto));
   }
 
-  @PostMapping("/upload/image")
-  public ResponseEntity<?> uploadImage(User user, @RequestParam("image") MultipartFile multipartFile) throws IOException {
+  @PostMapping("/upload/image/{username}")
+  public ResponseEntity<?> uploadImage(@PathVariable("username") String username,
+                                       @RequestParam("image") MultipartFile multipartFile) throws IOException {
     String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
 
     // Save the file to Cloudinary and get the upload result
@@ -45,13 +48,16 @@ public class UserController {
     if (uploadResult != null && uploadResult.containsKey("secure_url")) {
       String imageUrl = uploadResult.get("secure_url").toString();
 
+      User user = repo.findByUsername(username);
       // Update the user's image URL
       user.setImg(imageUrl);
 
       // Save the updated user information
-      User savedUser = repo.save(user);
+      repo.save(user);
 
-      return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+
+
+      return ResponseEntity.status(HttpStatus.CREATED).body("Upload successful");
     } else {
       // Handle the case where the file upload to Cloudinary failed
       return new ResponseEntity<>("Failed to upload the image", HttpStatus.INTERNAL_SERVER_ERROR);
