@@ -1,47 +1,49 @@
 package com.FPTU.service;
-
-import com.FPTU.dto.PaymentRequestDTO;
+import com.FPTU.model.PaypalPaymentIntent;
+import com.FPTU.model.PaypalPaymentMethod;
 import com.paypal.api.payments.*;
-import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.paypal.base.rest.APIContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-
 @Service
 public class PaypalService {
-    private static final Logger logger = LoggerFactory.getLogger(PaypalService.class);
     @Autowired
     private APIContext apiContext;
 
-    public Payment createPayment(PaymentRequestDTO paymentRequest) throws PayPalRESTException {
-        logger.info("Creating payment...");
+    public Payment createPayment(
+            Double total,
+            String currency,
+            PaypalPaymentMethod method,
+            PaypalPaymentIntent intent,
+            String description,
+            String cancelUrl,
+            String successUrl) throws PayPalRESTException {
         Amount amount = new Amount();
-        amount.setCurrency(paymentRequest.getCurrency());
-        amount.setTotal(String.format("%.2f", paymentRequest.getTotal()));
+        amount.setCurrency(currency);
+        amount.setTotal(String.format("%.2f", total));
 
         Transaction transaction = new Transaction();
-        transaction.setDescription(paymentRequest.getDescription());
+        transaction.setDescription(description);
         transaction.setAmount(amount);
 
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction);
 
         Payer payer = new Payer();
-        payer.setPaymentMethod(paymentRequest.getMethod().toString());
+        payer.setPaymentMethod(method.toString());
 
         Payment payment = new Payment();
-        payment.setIntent(paymentRequest.getIntent().toString());
+        payment.setIntent(intent.toString());
         payment.setPayer(payer);
         payment.setTransactions(transactions);
 
         RedirectUrls redirectUrls = new RedirectUrls();
-        redirectUrls.setCancelUrl(paymentRequest.getCancelUrl());
-        redirectUrls.setReturnUrl(paymentRequest.getSuccessUrl());
+        redirectUrls.setCancelUrl(cancelUrl);
+        redirectUrls.setReturnUrl(successUrl);
         payment.setRedirectUrls(redirectUrls);
 
         apiContext.setMaskRequestId(true);
@@ -58,5 +60,4 @@ public class PaypalService {
 
         return payment.execute(apiContext, paymentExecute);
     }
-
 }

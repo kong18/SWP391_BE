@@ -1,6 +1,8 @@
 package com.FPTU.service.impl;
 
+import com.FPTU.converter.CourseConverter;
 import com.FPTU.converter.OrderCourseConverter;
+import com.FPTU.dto.CourseDTO;
 import com.FPTU.dto.OrderCourseDTO;
 import com.FPTU.model.OrderCourse;
 import com.FPTU.model.OrderDetailCourse;
@@ -32,6 +34,9 @@ public class OrderCourseServiceImpl implements OrderCourseService {
     private CourseRepository courseRepository;
 
     @Autowired
+    private CourseConverter courseConverter;
+
+    @Autowired
     private OrderDetailCourseRepository orderDetailCourseRepository;
 
     @Override
@@ -40,6 +45,14 @@ public class OrderCourseServiceImpl implements OrderCourseService {
         List<OrderCourseDTO> listDTO = new ArrayList<>();
         for (OrderCourse o : list) {
             OrderCourseDTO orderCourseDTO = orderCourseConverter.toDTO(o);
+
+            List<Course> courses = courseRepository.findCourseByOrderId(orderCourseDTO.getId());
+            List<CourseDTO> coursesDTO = new ArrayList<>();
+            for (Course c: courses) {
+                coursesDTO.add(courseConverter.toDTO(c));
+            }
+
+            orderCourseDTO.setCourses(coursesDTO);
             listDTO.add(orderCourseDTO);
         }
         return listDTO;
@@ -55,12 +68,12 @@ public class OrderCourseServiceImpl implements OrderCourseService {
         String formattedDateTime = now.format(formatter);
         orderCourse.setOrderDate(formattedDateTime);
 
-        User user = userRepository.getOne(orderCourseDTO.getUserId());
+        User user = userRepository.findByUsername(orderCourseDTO.getUser().getUsername());
         orderCourse.setUser(user);
         orderCourse = orderCourseRepository.save(orderCourse);
-        for (Long c : orderCourseDTO.getCourseId()) {
+        for (CourseDTO c : orderCourseDTO.getCourses()) {
             OrderDetailCourse orderDetailCourse = new OrderDetailCourse();
-            orderDetailCourse.setCourse(courseRepository.getOne(c));
+            orderDetailCourse.setCourse(courseRepository.getOne(c.getId()));
             orderDetailCourse.setOrderCourse(orderCourseRepository.getOne(orderCourse.getOrderId()));
             orderDetailCourseRepository.save(orderDetailCourse);
         }
@@ -69,7 +82,15 @@ public class OrderCourseServiceImpl implements OrderCourseService {
 
     @Override
     public OrderCourseDTO findById(Long id) {
-        return orderCourseConverter.toDTO(orderCourseRepository.getOne(id));
+        OrderCourseDTO orderCourseDTO = orderCourseConverter.toDTO(orderCourseRepository.getOne(id));
+        List<Course> courses = courseRepository.findCourseByOrderId(orderCourseDTO.getId());
+        List<CourseDTO> coursesDTO = new ArrayList<>();
+        for (Course c: courses) {
+            coursesDTO.add(courseConverter.toDTO(c));
+        }
+
+        orderCourseDTO.setCourses(coursesDTO);
+        return orderCourseDTO;
     }
 
     @Override

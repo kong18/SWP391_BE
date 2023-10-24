@@ -35,7 +35,7 @@ dependencies {
     implementation ("com.google.code.gson:gson:2.8.9")
     implementation("com.puppycrawl.tools:checkstyle:10.9.1")
     implementation("mysql:mysql-connector-java:8.0.33")
-    implementation("com.paypal.sdk:rest-api-sdk:1.4.1")
+    implementation("com.paypal.sdk:rest-api-sdk:1.4.2")
     implementation ("com.stripe:stripe-java:22.0.0")
     implementation ("com.google.api-client:google-api-client:1.30.10")
     implementation("com.cloudinary:cloudinary-http44:1.35.0")

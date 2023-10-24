@@ -14,15 +14,16 @@ import java.util.List;
 @NoArgsConstructor
 public class CourseDTO {
     private Long id;
-    private Long userId;
+    private UserDTO user;
     private String title;
     private String description;
     private Long price;
     private String img;
     private String level;
-    private String createdDate;
     private CourseCategoryDTO category;
+    private String createdDate;
     private Long duration;
     private Double rating;
+    private List<RatingDTO> ratings;
     private List<CommentDTO> comments;
 }
