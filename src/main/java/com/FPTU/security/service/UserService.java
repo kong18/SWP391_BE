@@ -14,4 +14,6 @@ public interface UserService {
 
   AuthenticatedUserDto findAuthenticatedUserByUsername(String username);
 
+  void updateUser(User user);
+
 }
