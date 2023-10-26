@@ -36,7 +36,7 @@ public class SecurityConfiguration {
         .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
         .authorizeRequests()
         .antMatchers("/register", "/login", "/v3/api-docs/**",
-            "/swagger-ui/**", "/swagger-ui.html", "/actuator/**","/payment/**","/courses/**","/items/**","/ordercourses/**","/orderitems" ).permitAll()
+            "/swagger-ui/**", "/swagger-ui.html", "/actuator/**","/payment/**","/courses/**","/items/**","/ordercourses/**","/orderitems", "/coursedetail/**" ).permitAll()
         //.antMatchers("/items/addItem", "/courses/addCourse").hasRole(UserRole.INSTRUCTOR.name())
         .antMatchers().authenticated()
         .anyRequest().authenticated().and()
