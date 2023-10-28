@@ -2,10 +2,13 @@ package com.FPTU.converter;
 
 import com.FPTU.dto.OrderCourseDTO;
 import com.FPTU.model.OrderCourse;
+import com.FPTU.security.mapper.UserMapper;
 import org.springframework.stereotype.Component;
 
 @Component
 public class OrderCourseConverter {
+
+    private final UserMapper userMapper = UserMapper.INSTANCE;
     public OrderCourse toEntity(OrderCourseDTO orderCourseDTO) {
         OrderCourse orderCourse = new OrderCourse();
         orderCourse.setOrderDate(orderCourseDTO.getOrderDate());
@@ -17,9 +20,9 @@ public class OrderCourseConverter {
     public OrderCourseDTO toDTO(OrderCourse orderCourse) {
         OrderCourseDTO orderCourseDTO = new OrderCourseDTO();
         orderCourseDTO.setId(orderCourse.getOrderId());
-        orderCourseDTO.setUserId(orderCourse.getUser().getUserId());
         orderCourseDTO.setOrderDate(orderCourse.getOrderDate());
         orderCourseDTO.setTotal(orderCourse.getTotal());
+        orderCourseDTO.setUser(userMapper.convertToUserDto(orderCourse.getUser()));
         orderCourseDTO.setStatus(orderCourse.getStatus());
         orderCourseDTO.setPaymentMethod(orderCourse.getPaymentMethod());
         return  orderCourseDTO;

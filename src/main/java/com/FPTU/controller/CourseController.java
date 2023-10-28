@@ -4,6 +4,7 @@ import com.FPTU.dto.CourseDTO;
 import com.FPTU.exceptions.CourseNotFoundException;
 import com.FPTU.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -30,9 +31,14 @@ public class CourseController {
         return courseService.findById(id);
     }
 
-    @GetMapping("/user/{id}")
-    public List<CourseDTO> findAllByUserId_RoleCustomer(@PathVariable("id") Long id) {
-        return courseService.findAllByUserId_RoleCustomer(id);
+    @GetMapping("/customer/{username}")
+    public List<CourseDTO> findAllByUserId_RoleCustomer(@PathVariable("username") String username) {
+        return courseService.findAllByUserId_RoleCustomer(username);
+    }
+
+    @GetMapping("/instructor/{username}")
+    public List<CourseDTO> findAllByUserId_RoleInstructor(@PathVariable("username") String username) {
+        return courseService.findAllByUserId_RoleInstructor(username);
     }
 
     @GetMapping("/category/{id}")
@@ -47,28 +53,27 @@ public class CourseController {
 
     @PreAuthorize("hasRole('INSTRUCTOR')")
     @PostMapping()
-    public ResponseEntity<CourseDTO> addCourse(@RequestBody CourseDTO courseDTO) {
-        courseDTO = courseService.save(courseDTO);
-        return  ResponseEntity.ok(courseDTO);
+    public ResponseEntity<String> addCourse(@RequestBody CourseDTO courseDTO) {
+        String message = courseService.save(courseDTO);
+        return  ResponseEntity.status(HttpStatus.CREATED).body(message);
     }
     @PreAuthorize("hasRole('INSTRUCTOR')")
-    @PutMapping("/{id}")
-    public ResponseEntity<CourseDTO> updateCourse(@RequestBody CourseDTO courseDTO, @PathVariable("id") Long id) {
-        if(!courseService.existsById(id)) {
-            throw new CourseNotFoundException(id);
+    @PutMapping()
+    public ResponseEntity<String> updateCourse(@RequestBody CourseDTO courseDTO) {
+        if(!courseService.existsById(courseDTO.getId())) {
+            throw new CourseNotFoundException(courseDTO.getId());
         }
-        courseDTO.setId(id);
-        courseService.save(courseDTO);
-        return ResponseEntity.ok(courseDTO);
+        String message = courseService.save(courseDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(message);
     }
     @PreAuthorize("hasRole('INSTRUCTOR')")
     @DeleteMapping("/{id}")
-    public String deleteCourse(@PathVariable("id") Long id) {
+    public ResponseEntity<String> deleteCourse(@PathVariable("id") Long id) {
         if(!courseService.existsById(id)) {
             throw new CourseNotFoundException(id);
         }
         courseService.deleteById(id);
-        return "Delete the course by id " + id;
+        return ResponseEntity.ok("Delete the course with id" + id);
     }
 
 

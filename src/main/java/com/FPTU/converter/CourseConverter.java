@@ -1,8 +1,12 @@
 package com.FPTU.converter;
 
 import com.FPTU.dto.CourseDTO;
+import com.FPTU.dto.CourseDetailDTO;
 import com.FPTU.model.Course;
+import com.FPTU.model.CourseDetail;
 import com.FPTU.model.CourseLevel;
+import com.FPTU.repository.CourseCategoryRepository;
+import com.FPTU.security.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +14,8 @@ import org.springframework.stereotype.Component;
 public class CourseConverter {
     @Autowired
     private CourseCategoryConverter courseCategoryConverter;
+
+    private final UserMapper userMapper = UserMapper.INSTANCE;
 
 
     public Course toEntity(CourseDTO courseDTO) {
@@ -35,9 +41,9 @@ public class CourseConverter {
         courseDTO.setTitle(course.getTitle());
         courseDTO.setDescription(course.getDescription());
         courseDTO.setPrice(course.getPrice());
-        courseDTO.setUserId(course.getUser().getUserId());
         courseDTO.setCreatedDate(course.getCreatedDate());
         courseDTO.setImg(course.getImg());
+        courseDTO.setUser(userMapper.convertToUserDto(course.getUser()));
         courseDTO.setCategory(courseCategoryConverter.toDTO(course.getCourseCategory()));
         if (course.getLevel().equals(CourseLevel.BEGINNER)) {
             courseDTO.setLevel("BEGINNER");

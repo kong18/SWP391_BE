@@ -1,9 +1,12 @@
 package com.FPTU.service.impl;
 
 import com.FPTU.converter.CourseConverter;
+import com.FPTU.converter.RatingConverter;
 import com.FPTU.dto.CourseDTO;
+import com.FPTU.dto.RatingDTO;
 import com.FPTU.model.Course;
 import com.FPTU.model.CourseCategory;
+import com.FPTU.model.Rating;
 import com.FPTU.model.User;
 import com.FPTU.repository.*;
 import com.FPTU.service.CommentService;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,6 +42,9 @@ public class CourseServiceImpl implements CourseService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private RatingConverter ratingConverter;
+
     @Override
     public List<CourseDTO> getAllCourses() {
         List<Course> courses = courseRepository.findAll();
@@ -53,30 +60,41 @@ public class CourseServiceImpl implements CourseService {
                         cDTO.setDuration(0L);
                     }
                     cDTO.setComments(commentService.getCommentsByCourseId(cDTO.getId()));
+
+                    List<Rating> ratings = ratingRepository.findByCourse_CourseId(cDTO.getId());
+                    List<RatingDTO> ratingDTOS = new ArrayList<>();
+
+                    for (Rating r: ratings) {
+                        ratingDTOS.add(ratingConverter.toDTO(r));
+                    }
+                    cDTO.setRatings(ratingDTOS);
                 })
                 .collect(Collectors.toList());
     }
 
     @Override
-    public CourseDTO save(CourseDTO courseDTO) {
+    public String save(CourseDTO courseDTO) {
+        String message = "";
         Course course = new Course();
         if (courseDTO.getId() != null) {
             Course oldCourse = courseRepository.getOne(courseDTO.getId());
             course = courseConverter.toEntity(courseDTO, oldCourse);
+            message = "Update Course Success!";
         } else {
             course = courseConverter.toEntity(courseDTO);
+            message = "Add Course Success!";
             LocalDate now = LocalDate.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             String formattedDateTime = now.format(formatter);
             course.setCreatedDate(formattedDateTime);
         }
         CourseCategory courseCategory = courseCategoryRepository.getOne(courseDTO.getCategory().getId());
-        User user = userRepository.getOne(courseDTO.getUserId());
+        User user = userRepository.findByUsername(courseDTO.getUser().getUsername());
         course.setCourseCategory(courseCategory);
         course.setUser(user);
 
         course = courseRepository.save(course);
-        return courseConverter.toDTO(course);
+        return message;
     }
 
     @Override
@@ -93,6 +111,8 @@ public class CourseServiceImpl implements CourseService {
                     if (cDTO.getDuration() == null) {
                         cDTO.setDuration(0L);
                     }
+                    cDTO.setComments(commentService.getCommentsByCourseId(cDTO.getId()));
+
                 })
                 .collect(Collectors.toList());
     }
@@ -111,6 +131,15 @@ public class CourseServiceImpl implements CourseService {
     public CourseDTO findById(Long id) {
         Course c = courseRepository.getOne(id);
         CourseDTO cDTO = courseConverter.toDTO(c);
+        cDTO.setRating(ratingRepository.findAverageRating(cDTO.getId()));
+        if (cDTO.getRating() == null) {
+            cDTO.setRating(0.0);
+        }
+        cDTO.setDuration(courseDetailRepository.getSumEstimatedTimeByCourseId(cDTO.getId()));
+        if (cDTO.getDuration() == null) {
+            cDTO.setDuration(0L);
+        }
+        cDTO.setComments(commentService.getCommentsByCourseId(cDTO.getId()));
         return cDTO;
     }
 
@@ -128,13 +157,14 @@ public class CourseServiceImpl implements CourseService {
                     if (cDTO.getDuration() == null) {
                         cDTO.setDuration(0L);
                     }
+                    cDTO.setComments(commentService.getCommentsByCourseId(cDTO.getId()));
                 })
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<CourseDTO> findAllByUserId_RoleCustomer(Long id) {
-        List<Course> courses = courseRepository.findAllByUserIdRoleCustomer(id);
+    public List<CourseDTO> findAllByUserId_RoleCustomer(String username) {
+        List<Course> courses = courseRepository.findAllByUserIdRoleCustomer(username);
         return courses.stream()
                 .map(courseConverter::toDTO)
                 .peek(cDTO -> {
@@ -146,6 +176,27 @@ public class CourseServiceImpl implements CourseService {
                     if (cDTO.getDuration() == null) {
                         cDTO.setDuration(0L);
                     }
+                    cDTO.setComments(commentService.getCommentsByCourseId(cDTO.getId()));
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CourseDTO> findAllByUserId_RoleInstructor(String username) {
+        User user = userRepository.findByUsername(username);
+        List<Course> courses = courseRepository.findByUser_UserId(user.getUserId());
+        return courses.stream()
+                .map(courseConverter::toDTO)
+                .peek(cDTO -> {
+                    cDTO.setRating(ratingRepository.findAverageRating(cDTO.getId()));
+                    if (cDTO.getRating() == null) {
+                        cDTO.setRating(0.0);
+                    }
+                    cDTO.setDuration(courseDetailRepository.getSumEstimatedTimeByCourseId(cDTO.getId()));
+                    if (cDTO.getDuration() == null) {
+                        cDTO.setDuration(0L);
+                    }
+                    cDTO.setComments(commentService.getCommentsByCourseId(cDTO.getId()));
                 })
                 .collect(Collectors.toList());
     }

@@ -10,5 +10,6 @@ public interface OrderCourseService {
 
     OrderCourseDTO findById(Long id);
 
+    List<OrderCourseDTO> findOrderHistoryForUser(String username);
     void updateStatus(Long orderId, String newStatus);
 }

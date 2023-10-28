@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CourseService {
     List<CourseDTO> getAllCourses();
-    CourseDTO save(CourseDTO courseDTO);
+    String save(CourseDTO courseDTO);
 
     List<CourseDTO> findAllByCategoryId(Long categoryId);
 
@@ -20,5 +20,7 @@ public interface CourseService {
 
     List<CourseDTO> findByName(String title);
 
-    List<CourseDTO> findAllByUserId_RoleCustomer(Long id);
+    List<CourseDTO> findAllByUserId_RoleCustomer(String username);
+
+    List<CourseDTO> findAllByUserId_RoleInstructor(String username);
 }

@@ -34,19 +34,23 @@ public class ItemServiceImpl implements ItemService {
   }
 
   @Override
-  public ItemDTO save(ItemDTO itemDTO) {
+  public String save(ItemDTO itemDTO) {
     Item item = new Item();
+    String message = "";
     if (itemDTO.getId() != null) {
       Item oldItem = itemRepository.getOne(itemDTO.getId());
       item = itemConverter.toEntity(itemDTO, oldItem);
+      message = "Update Item Success";
     } else {
       item = itemConverter.toEntity(itemDTO);
+      message = "Add Item Success";
     }
-    ItemCategory itemCategory = itemCategoryRepository.getOne(itemDTO.getId());
+    ItemCategory itemCategory = itemCategoryRepository.getOne(itemDTO.getCategory().getId());
     item.setItemCategory(itemCategory);
-    item = itemRepository.save(item);
-    return itemConverter.toDTO(item);
+    itemRepository.save(item);
+    return message;
   }
+
   @Override
   public ItemDTO getItemById(Long id) {
     Optional<Item> itemOptional = itemRepository.findById(id);
@@ -68,6 +72,11 @@ public class ItemServiceImpl implements ItemService {
     return matchingItems.stream()
             .map(itemConverter::toDTO)
             .collect(Collectors.toList());
+  }
+
+  @Override
+  public boolean existsById(Long id) {
+    return itemRepository.existsById(id);
   }
 
   @Override

@@ -26,23 +26,23 @@ public class SecurityConfiguration {
 
   @Bean
   public AuthenticationManager authenticationManager(
-      final AuthenticationConfiguration authenticationConfiguration) throws Exception {
+          final AuthenticationConfiguration authenticationConfiguration) throws Exception {
     return authenticationConfiguration.getAuthenticationManager();
   }
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     return http.cors().and().csrf().disable()
-        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-        .authorizeRequests()
-        .antMatchers("/register", "/login", "/v3/api-docs/**",
-            "/swagger-ui/**", "/swagger-ui.html", "/actuator/**","/payment/**","/courses/**","/items/**" ).permitAll()
-        //.antMatchers("/items/addItem", "/courses/addCourse").hasRole(UserRole.INSTRUCTOR.name())
-        .antMatchers("/ordercourses/**","/orderitems").authenticated()
-        .anyRequest().authenticated().and()
-        .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and().build();
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+            .authorizeRequests()
+            .antMatchers("/register", "/login", "/v3/api-docs/**",
+                    "/swagger-ui/**", "/swagger-ui.html", "/actuator/**","/payment/**","/courses/**","/items/**","/ordercourses/**","/orderitems", "/coursedetail/**" ).permitAll()
+            //.antMatchers("/items/addItem", "/courses/addCourse").hasRole(UserRole.INSTRUCTOR.name())
+            .antMatchers().authenticated()
+            .anyRequest().authenticated().and()
+            .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and().build();
 
 
 
