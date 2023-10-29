@@ -11,4 +11,6 @@ public interface OrderItemService {
     OrderItemDTO findById(Long id);
 
     String updateStatus(String status, Long id);
+
+    List<OrderItemDTO> findByUserName(String username);
 }

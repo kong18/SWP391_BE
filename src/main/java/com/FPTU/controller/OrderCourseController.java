@@ -28,6 +28,10 @@ public class OrderCourseController {
         return orderCourseService.findById(id);
     }
 
+    @GetMapping("/history/{username}")
+    public List<OrderCourseDTO> findOrderCourseByUserName(@PathVariable("username") String username) {
+        return orderCourseService.findByUserName(username);
+    }
 
     @PostMapping()
     public OrderCourseDTO addOrderCourse(@RequestBody OrderCourseDTO orderCourseDTO) {

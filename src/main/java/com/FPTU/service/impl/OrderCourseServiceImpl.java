@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -43,20 +44,7 @@ public class OrderCourseServiceImpl implements OrderCourseService {
     @Override
     public List<OrderCourseDTO> findAll() {
         List<OrderCourse> list = orderCourseRepository.findAll();
-        List<OrderCourseDTO> listDTO = new ArrayList<>();
-        for (OrderCourse o : list) {
-            OrderCourseDTO orderCourseDTO = orderCourseConverter.toDTO(o);
-
-            List<Course> courses = courseRepository.findCourseByOrderId(orderCourseDTO.getId());
-            List<CourseDTO> coursesDTO = new ArrayList<>();
-            for (Course c: courses) {
-                coursesDTO.add(courseConverter.toDTO(c));
-            }
-
-            orderCourseDTO.setCourses(coursesDTO);
-            listDTO.add(orderCourseDTO);
-        }
-        return listDTO;
+        return getListDTO(list);
     }
 
     @Override
@@ -103,5 +91,29 @@ public class OrderCourseServiceImpl implements OrderCourseService {
             orderCourse.setStatus(newStatus);
             orderCourseRepository.save(orderCourse);
         }
+    }
+
+    @Override
+    public List<OrderCourseDTO> findByUserName(String username) {
+        List<OrderCourse> list = orderCourseRepository.findByUser_UserId(userRepository.findByUsername(username).getUserId());
+        return getListDTO(list);
+    }
+
+    private List<OrderCourseDTO> getListDTO(List<OrderCourse> list) {
+        List<OrderCourseDTO> listDTO = new ArrayList<>();
+        for (OrderCourse o : list) {
+            OrderCourseDTO orderCourseDTO = orderCourseConverter.toDTO(o);
+
+            List<Course> courses = courseRepository.findCourseByOrderId(orderCourseDTO.getId());
+            List<CourseDTO> coursesDTO = new ArrayList<>();
+            for (Course c: courses) {
+                coursesDTO.add(courseConverter.toDTO(c));
+            }
+
+            orderCourseDTO.setCourses(coursesDTO);
+            listDTO.add(orderCourseDTO);
+        }
+        listDTO.sort(Comparator.comparing(OrderCourseDTO::getOrderDate).reversed());
+        return listDTO;
     }
 }

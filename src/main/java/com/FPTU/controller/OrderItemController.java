@@ -27,6 +27,10 @@ public class OrderItemController {
         return orderItemService.findById(id);
     }
 
+    @GetMapping("/history/{username}")
+    public List<OrderItemDTO> findOrderItemByUserName(@PathVariable("username") String username) {
+        return orderItemService.findByUserName(username);
+    }
 
     @PostMapping()
     public OrderItemDTO addOrderItem(@RequestBody OrderItemDTO orderItemDTO) {

@@ -11,4 +11,6 @@ public interface OrderCourseService {
     OrderCourseDTO findById(Long id);
 
     void updateStatus(Long orderId, String newStatus);
+
+    List<OrderCourseDTO> findByUserName(String username);
 }

@@ -5,13 +5,19 @@ import com.FPTU.dto.ItemDTO;
 import com.FPTU.exceptions.CourseNotFoundException;
 import com.FPTU.exceptions.ItemNotFoundException;
 import com.FPTU.service.ItemService;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/items")
@@ -19,6 +25,9 @@ import java.util.List;
 public class ItemController {
     @Autowired
     private ItemService itemService;
+
+    @Autowired
+    private Cloudinary cloudinary;
 
     @GetMapping
     public List<ItemDTO> getAllItems() {
@@ -36,6 +45,32 @@ public class ItemController {
     public ResponseEntity<String> addItem(@RequestBody ItemDTO itemDTO) {
         String message = itemService.save(itemDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(message);
+    }
+
+    @PostMapping("/upload/image/{item_id}")
+    public ResponseEntity<?> uploadImage(@PathVariable("item_id") Long itemId,
+                                         @RequestParam("image") MultipartFile multipartFile) throws IOException {
+        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+
+        // Save the file to Cloudinary and get the upload result
+        Map uploadResult = cloudinary.uploader().upload(multipartFile.getBytes(), ObjectUtils.asMap("public_id", fileName));
+
+        // Check if the upload was successful and retrieve the public URL
+        if (uploadResult != null && uploadResult.containsKey("secure_url")) {
+            String imageUrl = uploadResult.get("secure_url").toString();
+
+            ItemDTO itemDTO = itemService.getItemById(itemId);
+
+            itemDTO.setImg(imageUrl);
+
+            itemService.save(itemDTO);
+
+
+            return ResponseEntity.status(HttpStatus.CREATED).body("Upload successful");
+        } else {
+            // Handle the case where the file upload to Cloudinary failed
+            return new ResponseEntity<>("Failed to upload the image", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PreAuthorize("hasRole('ADMIN')")

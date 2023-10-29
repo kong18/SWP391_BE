@@ -17,6 +17,7 @@ import com.paypal.base.rest.PayPalRESTException;
 @Controller
 @RestController
 @RequestMapping("/payment")
+@CrossOrigin("http://127.0.0.1:5173/")
 public class PaymentController {
     public static final String URL_PAYPAL_SUCCESS = "pay/success";
     public static final String URL_PAYPAL_CANCEL = "pay/cancel";
