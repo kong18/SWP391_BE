@@ -2,7 +2,7 @@ package com.FPTU.controller;
 
 import com.FPTU.dto.AuthenticatedUserDto;
 import com.FPTU.dto.UserDTO;
-import com.FPTU.model.ChangePasswordRequest;
+import com.FPTU.dto.ChangePasswordRequest;
 import com.FPTU.model.User;
 import com.FPTU.repository.UserRepository;
 import com.FPTU.security.dto.UserResponse;

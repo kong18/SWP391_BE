@@ -1,4 +1,4 @@
-package com.FPTU.model;
+package com.FPTU.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

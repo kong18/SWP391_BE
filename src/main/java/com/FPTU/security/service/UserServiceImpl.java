@@ -39,13 +39,14 @@ public class UserServiceImpl implements UserService {
   @Override
   public User findByUsername(String username) {
     final User user = userRepository.findByUsername(username);
-    if (user == null) {
-      final String errorMessage = exceptionMessageAccessor.getMessage(
-              null, USERNAME_NOT_FOUND);
-      throw new UserNotFoundException(errorMessage);
-    } else {
-      return user;
-    }
+//    if (user == null) {
+//      final String errorMessage = exceptionMessageAccessor.getMessage(
+//              null, USERNAME_NOT_FOUND);
+//      throw new UserNotFoundException(errorMessage);
+//    } else {
+//      return user;
+//    }
+    return user;
   }
 
   @Override
