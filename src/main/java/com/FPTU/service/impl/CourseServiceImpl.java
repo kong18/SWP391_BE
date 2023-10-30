@@ -61,13 +61,6 @@ public class CourseServiceImpl implements CourseService {
                     }
                     cDTO.setComments(commentService.getCommentsByCourseId(cDTO.getId()));
 
-                    List<Rating> ratings = ratingRepository.findByCourse_CourseId(cDTO.getId());
-                    List<RatingDTO> ratingDTOS = new ArrayList<>();
-
-                    for (Rating r: ratings) {
-                        ratingDTOS.add(ratingConverter.toDTO(r));
-                    }
-                    cDTO.setRatings(ratingDTOS);
                 })
                 .collect(Collectors.toList());
     }

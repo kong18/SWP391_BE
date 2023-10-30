@@ -17,6 +17,9 @@ public class CommentController {
 
     @PostMapping()
     public ResponseEntity<String> addComment(@RequestBody CommentDTO commentDTO) {
+        if (commentService.existCommentByUserNameAndCourseId(commentDTO.getUser().getUsername(), commentDTO.getCourseId())) {
+            return ResponseEntity.status(HttpStatus.OK).body("Comment only 1 time");
+        }
         commentService.save(commentDTO);
         return  ResponseEntity.status(HttpStatus.CREATED).body("Comment added successfully");
     }

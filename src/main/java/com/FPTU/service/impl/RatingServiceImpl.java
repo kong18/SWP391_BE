@@ -41,5 +41,14 @@ public class RatingServiceImpl implements RatingService {
         return ratingConverter.toDTO(rating);
     }
 
+    @Override
+    public boolean existByUserNameAndCourseId(String username, Long courseId) {
+        if (ratingRepository.findRatingByUserIdAndCourseId(
+                userRepository.findByUsername(username).getUserId(), courseId) == null) {
+            return false;
+        }
+        return true;
+    }
+
 
 }

@@ -24,6 +24,5 @@ public class CourseDTO {
     private String createdDate;
     private Long duration;
     private Double rating;
-    private List<RatingDTO> ratings;
     private List<CommentDTO> comments;
 }

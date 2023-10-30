@@ -12,4 +12,7 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
     Double findAverageRating(@Param("value") Long value);
 
     List<Rating> findByCourse_CourseId(Long courseId);
+
+    @Query(value = "SELECT * FROM rating where user_id = :user_id and course_id = :course_id", nativeQuery = true)
+    Rating findRatingByUserIdAndCourseId(@Param("user_id") Long userId, @Param("course_id") Long courseId);
 }

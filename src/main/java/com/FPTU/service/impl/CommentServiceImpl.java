@@ -4,9 +4,11 @@ import com.FPTU.converter.CommentConverter;
 import com.FPTU.dto.CommentDTO;
 import com.FPTU.model.Comment;
 import com.FPTU.model.Course;
+import com.FPTU.model.Rating;
 import com.FPTU.model.User;
 import com.FPTU.repository.CommentRepository;
 import com.FPTU.repository.CourseRepository;
+import com.FPTU.repository.RatingRepository;
 import com.FPTU.repository.UserRepository;
 import com.FPTU.security.mapper.UserMapper;
 import com.FPTU.service.CommentService;
@@ -28,6 +30,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RatingRepository ratingRepository;
 
     private final UserMapper userMapper = UserMapper.INSTANCE;
 
@@ -56,9 +61,23 @@ public class CommentServiceImpl implements CommentService {
             commentDTO.setId(c.getCommentId());
             commentDTO.setComment(c.getComment());
             commentDTO.setUser(userMapper.convertToUserDto(c.getUser()));
+            Rating rating = ratingRepository.findRatingByUserIdAndCourseId(c.getUser().getUserId(), c.getCourse().getCourseId());
+            if (rating != null) {
+                commentDTO.setRating(rating.getRating());
+            } else {
+                commentDTO.setRating(0L);
+            }
             commentDTOS.add(commentDTO);
         }
         return  commentDTOS;
+    }
+
+    @Override
+    public boolean existCommentByUserNameAndCourseId(String username, Long courseId) {
+        if (commentRepository.existByUserIdAndCourseId(userRepository.findByUsername(username).getUserId(), courseId) == null) {
+            return false;
+        }
+        return true;
     }
 
 

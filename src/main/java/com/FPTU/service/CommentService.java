@@ -9,4 +9,6 @@ public interface CommentService {
     CommentDTO save(CommentDTO commentDTO);
 
     List<CommentDTO> getCommentsByCourseId(Long id);
+
+    boolean existCommentByUserNameAndCourseId(String username, Long courseId);
 }
