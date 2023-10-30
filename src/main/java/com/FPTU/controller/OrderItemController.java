@@ -4,8 +4,6 @@ import com.FPTU.dto.OrderItemDTO;
 import com.FPTU.service.OrderItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,6 +27,10 @@ public class OrderItemController {
         return orderItemService.findById(id);
     }
 
+    @GetMapping("/history/{username}")
+    public List<OrderItemDTO> findOrderItemByUserName(@PathVariable("username") String username) {
+        return orderItemService.findByUserName(username);
+    }
 
     @PostMapping()
     public OrderItemDTO addOrderItem(@RequestBody OrderItemDTO orderItemDTO) {
@@ -38,12 +40,5 @@ public class OrderItemController {
     @PutMapping("/{id}")
     public String updateStatus(@PathVariable("id") Long id, @RequestBody OrderItemDTO orderItemDTO) {
         return orderItemService.updateStatus(orderItemDTO.getStatus(), id);
-    }
-    @GetMapping("/orderitemhistory/{username}")
-    public List<OrderItemDTO> getOrderItemHistoryForUser(@PathVariable("username") String username) {
-        // Implement the logic to get order item history for the specified user
-        List<OrderItemDTO> orderItemHistory = orderItemService.findOrderItemHistoryForUser(username);
-
-        return orderItemHistory;
     }
 }

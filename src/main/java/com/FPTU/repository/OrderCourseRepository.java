@@ -22,7 +22,7 @@ public interface OrderCourseRepository extends JpaRepository<OrderCourse, Long> 
     @Query("UPDATE OrderCourse o SET o.status = :newStatus")
     void updateStatus(@Param("newStatus") String newStatus);
 
-    @Query("SELECT oc FROM OrderCourse oc WHERE oc.user.username = :username")
-    List<OrderCourse> findOrderHistoryForUser(@Param("username") String username);
+    List<OrderCourse> findByUser_UserId(Long userId);
+
 
 }

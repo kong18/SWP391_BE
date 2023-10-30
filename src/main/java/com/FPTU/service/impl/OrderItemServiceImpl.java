@@ -19,9 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import static com.mysql.cj.conf.PropertyKey.logger;
@@ -48,21 +47,7 @@ public class OrderItemServiceImpl implements OrderItemService {
     @Override
     public List<OrderItemDTO> findAll() {
         List<OrderItem> list = orderItemRepository.findAll();
-        List<OrderItemDTO> listDTO = new ArrayList<>();
-        for (OrderItem o : list) {
-            OrderItemDTO orderItemDTO = orderItemConverter.toDTO(o);
-
-            List<Item> items = itemRepository.findItemByOrderId(orderItemDTO.getId());
-            List<ItemDTO> itemsDTO = new ArrayList<>();
-            for (Item c : items) {
-                itemsDTO.add(itemConverter.toDTO(c));
-            }
-
-            orderItemDTO.setItems(itemsDTO);
-
-            listDTO.add(orderItemDTO);
-        }
-        return listDTO;
+        return getListDTO(list);
     }
 
     @Override
@@ -77,6 +62,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 
         User user = userRepository.findByUsername(orderItemDTO.getUser().getUsername());
         orderItem.setUser(user);
+        orderItem.setAddress(user.getAddress());
         orderItem = orderItemRepository.save(orderItem);
         for (ItemDTO i : orderItemDTO.getItems()) {
             OrderDetailItem orderDetailItem = new OrderDetailItem();
@@ -88,24 +74,11 @@ public class OrderItemServiceImpl implements OrderItemService {
     }
 
     @Override
-    public List<OrderItemDTO> findAllForUser(String username) {
-        // Implement the logic to retrieve order items for the specified user
-        List<OrderItem> orderItems = orderItemRepository.findAllByUserUsername(username);
-
-        // Convert the list of OrderItem entities to a list of OrderItemDTOs
-        List<OrderItemDTO> orderItemDTOs = orderItems.stream()
-                .map(orderItemConverter::toDTO)
-                .collect(Collectors.toList());
-
-        return orderItemDTOs;
-    }
-
-    @Override
     public OrderItemDTO findById(Long id) {
         OrderItemDTO orderItemDTO = orderItemConverter.toDTO(orderItemRepository.getOne(id));
         List<Item> items = itemRepository.findItemByOrderId(orderItemDTO.getId());
         List<ItemDTO> itemsDTO = new ArrayList<>();
-        for (Item c : items) {
+        for (Item c: items) {
             itemsDTO.add(itemConverter.toDTO(c));
         }
 
@@ -133,16 +106,27 @@ public class OrderItemServiceImpl implements OrderItemService {
     }
 
     @Override
-    public List<OrderItemDTO> findOrderItemHistoryForUser(String username) {
-        // Implement the logic to find and return the order item history for the specified user
-        List<OrderItem> orderItems = orderItemRepository.findOrderItemHistoryForUser(username);
-
-        // Convert the list of OrderItem entities to a list of OrderItemDTOs
-        List<OrderItemDTO> orderItemDTOs = orderItems.stream()
-                .map(orderItemConverter::toDTO)
-                .collect(Collectors.toList());
-
-        return orderItemDTOs;
+    public List<OrderItemDTO> findByUserName(String username) {
+        List<OrderItem> list = orderItemRepository.findByUser_UserId(userRepository.findByUsername(username).getUserId());
+        return getListDTO(list);
     }
 
+    private List<OrderItemDTO> getListDTO(List<OrderItem> list) {
+        List<OrderItemDTO> listDTO = new ArrayList<>();
+        for (OrderItem o : list) {
+            OrderItemDTO orderItemDTO = orderItemConverter.toDTO(o);
+
+            List<Item> items = itemRepository.findItemByOrderId(orderItemDTO.getId());
+            List<ItemDTO> itemsDTO = new ArrayList<>();
+            for (Item c: items) {
+                itemsDTO.add(itemConverter.toDTO(c));
+            }
+
+            orderItemDTO.setItems(itemsDTO);
+
+            listDTO.add(orderItemDTO);
+        }
+        listDTO.sort(Comparator.comparing(OrderItemDTO::getOrderDate).reversed());
+        return listDTO;
+    }
 }

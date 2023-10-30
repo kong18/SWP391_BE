@@ -28,8 +28,12 @@ public class OrderCourseController {
         return orderCourseService.findById(id);
     }
 
+    @GetMapping("/history/{username}")
+    public List<OrderCourseDTO> findOrderCourseByUserName(@PathVariable("username") String username) {
+        return orderCourseService.findByUserName(username);
+    }
 
-    @PostMapping
+    @PostMapping()
     public OrderCourseDTO addOrderCourse(@RequestBody OrderCourseDTO orderCourseDTO) {
         return orderCourseService.save(orderCourseDTO);
     }
@@ -39,13 +43,5 @@ public class OrderCourseController {
     public void updateStatus(@PathVariable("id") Long orderId, @RequestBody Map<String, String> request) {
         String newStatus = request.get("newStatus");
         orderCourseService.updateStatus(orderId, newStatus);
-    }
-
-    @GetMapping("/orderhistory/{username}")
-    public List<OrderCourseDTO> getOrderHistoryForUser(@PathVariable("username") String username) {
-        // Implement the logic to get order history for the specified user
-        List<OrderCourseDTO> orderHistory = orderCourseService.findOrderHistoryForUser(username);
-
-        return orderHistory;
     }
 }
