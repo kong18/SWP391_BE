@@ -1,6 +1,7 @@
 package com.FPTU.controller;
 
 import com.FPTU.dto.AuthenticatedUserDto;
+import com.FPTU.dto.UserDTO;
 import com.FPTU.model.ChangePasswordRequest;
 import com.FPTU.model.User;
 import com.FPTU.repository.UserRepository;
@@ -90,5 +91,12 @@ public class UserController {
         } else {
             return new ResponseEntity<>("Incorrect old password", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PutMapping
+    public ResponseEntity<String> updateUserByUserName(@PathVariable UserDTO userDTO) {
+        final User user = userService.findByUsername(userDTO.getUsername());
+        repo.save(user);
+        return ResponseEntity.status(HttpStatus.OK).body("Update user successfully");
     }
 }

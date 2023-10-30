@@ -13,5 +13,6 @@ public class CommentDTO {
     private Long id;
     private UserDTO user;
     private Long courseId;
+    private RatingDTO ratingDTO;
     private String comment;
 }

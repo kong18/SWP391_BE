@@ -20,6 +20,8 @@ public class AuthenticatedUserDto {
 
   private String img;
 
+  private String email;
+
   private String address;
 
 }
