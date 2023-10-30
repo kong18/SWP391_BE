@@ -94,9 +94,16 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<String> updateUserByUserName(@PathVariable UserDTO userDTO) {
+    public ResponseEntity<String> updateUserByUserName(@RequestBody UserDTO userDTO) {
         final User user = userService.findByUsername(userDTO.getUsername());
-        repo.save(user);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.OK).body("User doesn't exist");
+        }
+        user.setName(userDTO.getName());
+        user.setAddress(userDTO.getAddress());
+        user.setImg(userDTO.getImg());
+
+        userService.updateUser(user);
         return ResponseEntity.status(HttpStatus.OK).body("Update user successfully");
     }
 }
