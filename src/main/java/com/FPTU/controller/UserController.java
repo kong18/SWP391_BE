@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -37,6 +38,15 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @GetMapping()
+    public List<AuthenticatedUserDto> findAll() {
+        return userService.findAll();
+    }
+
+    @GetMapping("/instructor")
+    public List<AuthenticatedUserDto> findAllInstructor() {
+        return userService.findByRoleInstructor();
+    }
 
     @GetMapping(path = "/{username}")
     public ResponseEntity<UserResponse> findUserByUsername(@PathVariable String username) {

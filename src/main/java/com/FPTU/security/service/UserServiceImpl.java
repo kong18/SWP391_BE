@@ -16,6 +16,9 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Log4j2
 @Service
 @RequiredArgsConstructor
@@ -81,6 +84,22 @@ public class UserServiceImpl implements UserService {
   @Override
   public void updateUser(User user) {
     userRepository.save(user);
+  }
+
+  @Override
+  public List<AuthenticatedUserDto> findAll() {
+    List<User> list = userRepository.findAll();
+    return list.stream()
+            .map(userMapper::convertToAuthenticatedUserDto)
+            .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<AuthenticatedUserDto> findByRoleInstructor() {
+    List<User> list = userRepository.findByRole("ROLE_INSTRUCTOR");
+    return list.stream()
+            .map(userMapper::convertToAuthenticatedUserDto)
+            .collect(Collectors.toList());
   }
 
 

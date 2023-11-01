@@ -22,6 +22,7 @@ dependencies {
     api("org.springframework.boot:spring-boot-starter-validation:2.7.10")
     api("org.springframework.boot:spring-boot-starter-security:2.7.10")
     api("org.springframework.boot:spring-boot-starter-actuator:2.7.10")
+    api("org.springframework.boot:spring-boot-starter-mail:2.7.10")
     api("com.auth0:java-jwt:4.3.0")
     api("org.mapstruct:mapstruct:1.5.3.Final")
     api("org.mapstruct:mapstruct-processor:1.5.3.Final")

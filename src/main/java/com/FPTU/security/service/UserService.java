@@ -5,6 +5,8 @@ import com.FPTU.model.User;
 import com.FPTU.security.dto.RegistrationRequest;
 import com.FPTU.security.dto.RegistrationResponse;
 
+import java.util.List;
+
 
 public interface UserService {
 
@@ -16,4 +18,7 @@ public interface UserService {
 
   void updateUser(User user);
 
+  List<AuthenticatedUserDto> findAll();
+
+  List<AuthenticatedUserDto> findByRoleInstructor();
 }
