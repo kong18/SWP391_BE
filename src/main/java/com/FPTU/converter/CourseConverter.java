@@ -44,7 +44,7 @@ public class CourseConverter {
         courseDTO.setDescription(course.getDescription());
         courseDTO.setPrice(course.getPrice());
         courseDTO.setCreatedDate(course.getCreatedDate());
-        course.setImg(courseDTO.getImg());
+        courseDTO.setImg(course.getImg());
         courseDTO.setUser(userMapper.convertToUserDto(course.getUser()));
         courseDTO.setCategory(courseCategoryConverter.toDTO(course.getCourseCategory()));
         if (course.getLevel().equals(CourseLevel.BEGINNER)) {
