@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CourseService {
     List<CourseDTO> getAllCourses();
-    String save(CourseDTO courseDTO);
+    CourseDTO save(CourseDTO courseDTO);
 
     List<CourseDTO> findAllByCategoryId(Long categoryId);
 

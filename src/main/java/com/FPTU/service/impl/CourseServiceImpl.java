@@ -66,16 +66,13 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public String save(CourseDTO courseDTO) {
-        String message = "";
+    public CourseDTO save(CourseDTO courseDTO) {
         Course course = new Course();
         if (courseDTO.getId() != null) {
             Course oldCourse = courseRepository.getOne(courseDTO.getId());
             course = courseConverter.toEntity(courseDTO, oldCourse);
-            message = "Update Course Success!";
         } else {
             course = courseConverter.toEntity(courseDTO);
-            message = "Add Course Success!";
             LocalDate now = LocalDate.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             String formattedDateTime = now.format(formatter);
@@ -87,7 +84,7 @@ public class CourseServiceImpl implements CourseService {
         course.setUser(user);
 
         course = courseRepository.save(course);
-        return message;
+        return courseConverter.toDTO(course);
     }
 
     @Override

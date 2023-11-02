@@ -91,18 +91,18 @@ public class CourseController {
 
     @PreAuthorize("hasRole('INSTRUCTOR')")
     @PostMapping()
-    public ResponseEntity<String> addCourse(@RequestBody CourseDTO courseDTO) {
-        String message = courseService.save(courseDTO);
-        return  ResponseEntity.status(HttpStatus.CREATED).body(message);
+    public ResponseEntity<CourseDTO> addCourse(@RequestBody CourseDTO courseDTO) {
+        CourseDTO c = courseService.save(courseDTO);
+        return  ResponseEntity.status(HttpStatus.CREATED).body(c);
     }
     @PreAuthorize("hasRole('INSTRUCTOR')")
     @PutMapping()
-    public ResponseEntity<String> updateCourse(@RequestBody CourseDTO courseDTO) {
+    public ResponseEntity<CourseDTO> updateCourse(@RequestBody CourseDTO courseDTO) {
         if(!courseService.existsById(courseDTO.getId())) {
             throw new CourseNotFoundException(courseDTO.getId());
         }
-        String message = courseService.save(courseDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(message);
+        CourseDTO c = courseService.save(courseDTO);
+        return  ResponseEntity.status(HttpStatus.CREATED).body(c);
     }
     @PreAuthorize("hasRole('INSTRUCTOR')")
     @DeleteMapping("/{id}")
