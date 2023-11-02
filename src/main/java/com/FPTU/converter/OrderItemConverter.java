@@ -12,7 +12,6 @@ public class OrderItemConverter {
     private final UserMapper userMapper = UserMapper.INSTANCE;
     public OrderItem toEntity(OrderItemDTO orderItemDTO) {
         OrderItem orderItem = new OrderItem();
-        orderItem.setOrderDate(orderItemDTO.getOrderDate());
         orderItem.setTotal(orderItemDTO.getTotal());
         orderItem.setStatus(Status.PROCESSING);
         orderItem.setAddress(orderItemDTO.getAddress());
@@ -24,7 +23,6 @@ public class OrderItemConverter {
         OrderItemDTO orderItemDTO = new OrderItemDTO();
         orderItemDTO.setId(orderItem.getOrderId());
         orderItemDTO.setUser(userMapper.convertToUserDto(orderItem.getUser()));
-        orderItemDTO.setOrderDate(orderItem.getOrderDate());
         orderItemDTO.setTotal(orderItem.getTotal());
         orderItemDTO.setStatus(orderItem.getStatus().toString());
         orderItemDTO.setAddress(orderItemDTO.getAddress());

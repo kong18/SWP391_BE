@@ -17,13 +17,15 @@ public class CourseConverter {
 
     private final UserMapper userMapper = UserMapper.INSTANCE;
 
+    private final String defaultImg = "https://res.cloudinary.com/diaixspmb/image/upload/v1698942338/download.png.png";
 
     public Course toEntity(CourseDTO courseDTO) {
         Course course = new Course();
         course.setTitle(courseDTO.getTitle());
         course.setDescription(courseDTO.getDescription());
         course.setPrice(courseDTO.getPrice());
-        course.setImg(courseDTO.getImg());
+        String img = (courseDTO.getImg() != null) ? courseDTO.getImg() : defaultImg;
+        course.setImg(img);
         if (courseDTO.getLevel().equalsIgnoreCase("BEGINNER")) {
             course.setLevel(CourseLevel.BEGINNER);
         }
@@ -42,7 +44,7 @@ public class CourseConverter {
         courseDTO.setDescription(course.getDescription());
         courseDTO.setPrice(course.getPrice());
         courseDTO.setCreatedDate(course.getCreatedDate());
-        courseDTO.setImg(course.getImg());
+        course.setImg(courseDTO.getImg());
         courseDTO.setUser(userMapper.convertToUserDto(course.getUser()));
         courseDTO.setCategory(courseCategoryConverter.toDTO(course.getCourseCategory()));
         if (course.getLevel().equals(CourseLevel.BEGINNER)) {
@@ -60,7 +62,9 @@ public class CourseConverter {
         course.setTitle(courseDTO.getTitle());
         course.setDescription(courseDTO.getDescription());
         course.setPrice(courseDTO.getPrice());
-        course.setImg(courseDTO.getImg());
+        if (courseDTO.getImg() != null) {
+            course.setImg(courseDTO.getImg());
+        }
         if (courseDTO.getLevel().equalsIgnoreCase("BEGINNER")) {
             course.setLevel(CourseLevel.BEGINNER);
         }

@@ -10,12 +10,14 @@ public class ItemConverter {
 
   @Autowired
   private ItemCategoryConverter itemCategoryConverter;
+  private final String defaultImg = "https://res.cloudinary.com/diaixspmb/image/upload/v1698942338/download.png.png";
   public Item toEntity(ItemDTO itemDTO){
     Item item = new Item();
     item.setName(itemDTO.getName());
     item.setDescription(itemDTO.getDescription());
     item.setPrice(itemDTO.getPrice());
-    item.setImg(itemDTO.getImg());
+    String img = (itemDTO.getImg() != null) ? itemDTO.getImg() : defaultImg;
+    item.setImg(img);
     return item;
   }
   public ItemDTO toDTO(Item item){
@@ -33,7 +35,9 @@ public class ItemConverter {
     item.setName(item.getName());
     item.setDescription(itemDTO.getDescription());
     item.setPrice(itemDTO.getPrice());
-    item.setImg(itemDTO.getImg());
+    if (itemDTO.getImg() != null) {
+      item.setImg(itemDTO.getImg());
+    }
     return item;
   }
 

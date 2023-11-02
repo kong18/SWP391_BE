@@ -11,7 +11,6 @@ public class OrderCourseConverter {
     private final UserMapper userMapper = UserMapper.INSTANCE;
     public OrderCourse toEntity(OrderCourseDTO orderCourseDTO) {
         OrderCourse orderCourse = new OrderCourse();
-        orderCourse.setOrderDate(orderCourseDTO.getOrderDate());
         orderCourse.setTotal(orderCourseDTO.getTotal());
         orderCourse.setStatus("New");
         orderCourse.setPaymentMethod("Paypal");
@@ -20,7 +19,6 @@ public class OrderCourseConverter {
     public OrderCourseDTO toDTO(OrderCourse orderCourse) {
         OrderCourseDTO orderCourseDTO = new OrderCourseDTO();
         orderCourseDTO.setId(orderCourse.getOrderId());
-        orderCourseDTO.setOrderDate(orderCourse.getOrderDate());
         orderCourseDTO.setTotal(orderCourse.getTotal());
         orderCourseDTO.setUser(userMapper.convertToUserDto(orderCourse.getUser()));
         orderCourseDTO.setStatus(orderCourse.getStatus());

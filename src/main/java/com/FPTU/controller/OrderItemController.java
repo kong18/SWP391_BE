@@ -1,6 +1,7 @@
 package com.FPTU.controller;
 
 import com.FPTU.dto.OrderItemDTO;
+import com.FPTU.dto.OrderRevenueByMonth;
 import com.FPTU.service.OrderItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,6 +31,11 @@ public class OrderItemController {
     @GetMapping("/history/{username}")
     public List<OrderItemDTO> findOrderItemByUserName(@PathVariable("username") String username) {
         return orderItemService.findByUserName(username);
+    }
+
+    @GetMapping("/monthly")
+    public List<OrderRevenueByMonth> getMonthlyRevenue() {
+        return orderItemService.getMonthlyRevenue();
     }
 
     @PostMapping()

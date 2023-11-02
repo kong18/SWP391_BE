@@ -3,10 +3,7 @@ package com.FPTU.service.impl;
 import com.FPTU.converter.ItemConverter;
 import com.FPTU.converter.OrderCourseConverter;
 import com.FPTU.converter.OrderItemConverter;
-import com.FPTU.dto.CourseDTO;
-import com.FPTU.dto.ItemDTO;
-import com.FPTU.dto.OrderCourseDTO;
-import com.FPTU.dto.OrderItemDTO;
+import com.FPTU.dto.*;
 import com.FPTU.model.*;
 import com.FPTU.repository.*;
 import com.FPTU.service.OrderCourseService;
@@ -16,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -46,7 +45,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     public List<OrderItemDTO> findAll() {
-        List<OrderItem> list = orderItemRepository.findAll();
+        List<OrderItem> list = orderItemRepository.findAllByOrderDateDesc();
         return getListDTO(list);
     }
 
@@ -54,9 +53,8 @@ public class OrderItemServiceImpl implements OrderItemService {
     public OrderItemDTO save(OrderItemDTO orderItemDTO) {
         OrderItem orderItem = new OrderItem();
         orderItem = orderItemConverter.toEntity(orderItemDTO);
-
-        LocalDate now = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDateTime = now.format(formatter);
         orderItem.setOrderDate(formattedDateTime);
 
@@ -106,6 +104,16 @@ public class OrderItemServiceImpl implements OrderItemService {
     }
 
     @Override
+    public List<OrderRevenueByMonth> getMonthlyRevenue() {
+        List<OrderRevenueByMonth> list = new ArrayList<>();
+        for (Object[] o : orderItemRepository.getMonthlyRevenue()) {
+            OrderRevenueByMonth or = new OrderRevenueByMonth(o);
+            list.add(or);
+        }
+        return list;
+    }
+
+    @Override
     public List<OrderItemDTO> findByUserName(String username) {
         List<OrderItem> list = orderItemRepository.findByUser_UserId(userRepository.findByUsername(username).getUserId());
         return getListDTO(list);
@@ -115,6 +123,9 @@ public class OrderItemServiceImpl implements OrderItemService {
         List<OrderItemDTO> listDTO = new ArrayList<>();
         for (OrderItem o : list) {
             OrderItemDTO orderItemDTO = orderItemConverter.toDTO(o);
+
+            String orderDate = getOrderDate(o.getOrderDate());
+            orderItemDTO.setOrderDate(orderDate);
 
             List<Item> items = itemRepository.findItemByOrderId(orderItemDTO.getId());
             List<ItemDTO> itemsDTO = new ArrayList<>();
@@ -126,7 +137,33 @@ public class OrderItemServiceImpl implements OrderItemService {
 
             listDTO.add(orderItemDTO);
         }
-        listDTO.sort(Comparator.comparing(OrderItemDTO::getOrderDate).reversed());
         return listDTO;
+    }
+
+    public String getOrderDate(String l) {
+        String time = "";
+        LocalDateTime currentTime = LocalDateTime.now();
+        LocalDateTime orderDate = convertStringToLocalDateTime(l);
+        Duration duration = Duration.between(orderDate, currentTime);
+        long minutes = duration.toMinutes();
+
+        if (minutes < 60) {
+            time = minutes + " minutes ago";
+        } else if (minutes < (24 * 60)) {
+            long hours = duration.toHours();
+            time = hours + " hours ago";
+        } else if (minutes < (24 * 60 * 30)) {
+            long days = duration.toDays();
+            time = days + " days ago";
+        } else {
+            long months = minutes / (24 * 60 * 30);
+            time = months + " months ago";
+        }
+        return time;
+    }
+
+    public LocalDateTime convertStringToLocalDateTime(String dateString) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return LocalDateTime.parse(dateString, formatter);
     }
 }

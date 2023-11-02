@@ -1,6 +1,7 @@
 package com.FPTU.service;
 
 import com.FPTU.dto.OrderCourseDTO;
+import com.FPTU.dto.OrderRevenueByMonth;
 
 import java.util.List;
 
@@ -9,6 +10,8 @@ public interface OrderCourseService {
     OrderCourseDTO save(OrderCourseDTO orderCourseDTO);
 
     OrderCourseDTO findById(Long id);
+
+    List<OrderRevenueByMonth> getMonthlyRevenue();
 
     void updateStatus(Long orderId, String newStatus);
 

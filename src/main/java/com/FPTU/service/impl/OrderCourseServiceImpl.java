@@ -4,6 +4,7 @@ import com.FPTU.converter.CourseConverter;
 import com.FPTU.converter.OrderCourseConverter;
 import com.FPTU.dto.CourseDTO;
 import com.FPTU.dto.OrderCourseDTO;
+import com.FPTU.dto.OrderRevenueByMonth;
 import com.FPTU.model.Course;
 import com.FPTU.model.OrderCourse;
 import com.FPTU.model.OrderDetailCourse;
@@ -17,7 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -43,7 +45,7 @@ public class OrderCourseServiceImpl implements OrderCourseService {
 
     @Override
     public List<OrderCourseDTO> findAll() {
-        List<OrderCourse> list = orderCourseRepository.findAll();
+        List<OrderCourse> list = orderCourseRepository.findAllByOrderDateDesc();
         return getListDTO(list);
     }
 
@@ -52,8 +54,8 @@ public class OrderCourseServiceImpl implements OrderCourseService {
         OrderCourse orderCourse = new OrderCourse();
         orderCourse = orderCourseConverter.toEntity(orderCourseDTO);
 
-        LocalDate now = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDateTime = now.format(formatter);
         orderCourse.setOrderDate(formattedDateTime);
 
@@ -83,6 +85,16 @@ public class OrderCourseServiceImpl implements OrderCourseService {
     }
 
     @Override
+    public List<OrderRevenueByMonth> getMonthlyRevenue() {
+        List<OrderRevenueByMonth> list = new ArrayList<>();
+        for (Object[] o : orderCourseRepository.getMonthlyRevenue()) {
+            OrderRevenueByMonth or = new OrderRevenueByMonth(o);
+            list.add(or);
+        }
+        return list;
+    }
+
+    @Override
     @Transactional
     public void updateStatus(Long orderId, String newStatus) {
         // Implement the logic to update the status based on orderId and newStatus
@@ -104,6 +116,9 @@ public class OrderCourseServiceImpl implements OrderCourseService {
         for (OrderCourse o : list) {
             OrderCourseDTO orderCourseDTO = orderCourseConverter.toDTO(o);
 
+            String orderDate = getOrderDate(o.getOrderDate());
+            orderCourseDTO.setOrderDate(orderDate);
+
             List<Course> courses = courseRepository.findCourseByOrderId(orderCourseDTO.getId());
             List<CourseDTO> coursesDTO = new ArrayList<>();
             for (Course c: courses) {
@@ -113,7 +128,34 @@ public class OrderCourseServiceImpl implements OrderCourseService {
             orderCourseDTO.setCourses(coursesDTO);
             listDTO.add(orderCourseDTO);
         }
-        listDTO.sort(Comparator.comparing(OrderCourseDTO::getOrderDate).reversed());
         return listDTO;
+    }
+
+    public String getOrderDate(String l) {
+        String time = "";
+        LocalDateTime currentTime = LocalDateTime.now();
+        LocalDateTime orderDate = convertStringToLocalDateTime(l);
+        Duration duration = Duration.between(orderDate, currentTime);
+        long minutes = duration.toMinutes();
+
+        if (minutes < 60) {
+            time = minutes + " minutes ago";
+        } else if (minutes < (24 * 60)) {
+            long hours = duration.toHours();
+            time = hours + " hours ago";
+        } else if (minutes < (24 * 60 * 30)) {
+            long days = duration.toDays();
+            time = days + " days ago";
+        } else {
+            long months = minutes / (24 * 60 * 30);
+            time = months + " months ago";
+        }
+
+        return time;
+    }
+
+    public LocalDateTime convertStringToLocalDateTime(String dateString) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return LocalDateTime.parse(dateString, formatter);
     }
 }

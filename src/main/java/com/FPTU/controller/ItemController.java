@@ -42,9 +42,9 @@ public class ItemController {
 
     @PreAuthorize("hasRole('ADMIN')")// Restrict access to ADMIN role
     @PostMapping
-    public ResponseEntity<String> addItem(@RequestBody ItemDTO itemDTO) {
-        String message = itemService.save(itemDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(message);
+    public ResponseEntity<ItemDTO> addItem(@RequestBody ItemDTO itemDTO) {
+        ItemDTO i = itemService.save(itemDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(i);
     }
 
     @PostMapping("/upload/image/{item_id}")
@@ -75,12 +75,12 @@ public class ItemController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping
-    public ResponseEntity<String> updateItem(@RequestBody ItemDTO itemDTO) {
+    public ResponseEntity<ItemDTO> updateItem(@RequestBody ItemDTO itemDTO) {
         if(!itemService.existsById(itemDTO.getId())) {
             throw new ItemNotFoundException(itemDTO.getId());
         }
-        String message = itemService.save(itemDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(message);
+        ItemDTO i = itemService.save(itemDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(i);
     }
 
     @PreAuthorize("hasRole('ADMIN')") // Restrict access to ADMIN role
