@@ -12,6 +12,8 @@ import java.util.List;
 public interface CourseDetailRepository extends JpaRepository<CourseDetail, Long> {
     List<CourseDetail> findAll();
 
+    void deleteByCourse_CourseId(Long courseId);
+
     List<CourseDetail> findByCourse_CourseId(Long courseId);
 
     boolean existsById(Long id);

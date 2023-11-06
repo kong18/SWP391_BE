@@ -10,8 +10,10 @@ import com.FPTU.service.CourseDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseDetailServiceImpl implements CourseDetailService {
@@ -54,5 +56,28 @@ public class CourseDetailServiceImpl implements CourseDetailService {
     @Override
     public void deleteById(Long id){
         courseDetailRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public List<CourseDetailDTO> saveAll(List<CourseDetailDTO> list, Long courseId) {
+        // Delete existing CourseDetails by courseId
+        courseDetailRepository.deleteByCourse_CourseId(courseId);
+
+        // Save new CourseDetails
+        List<CourseDetail> savedCourseDetails = list.stream()
+                .map(courseDetailDTO -> {
+                    CourseDetail courseDetail = courseDetailConverter.toEntity(courseDetailDTO);
+                    Course course = new Course();
+                    course.setCourseId(courseId);
+                    courseDetail.setCourse(course);
+                    return courseDetail;
+                })
+                .collect(Collectors.toList());
+
+        savedCourseDetails = courseDetailRepository.saveAll(savedCourseDetails);
+        return savedCourseDetails.stream()
+                .map(courseDetail -> courseDetailConverter.toDTO(courseDetail))
+                .collect(Collectors.toList());
     }
 }
