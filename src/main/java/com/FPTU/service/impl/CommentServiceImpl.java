@@ -2,6 +2,7 @@ package com.FPTU.service.impl;
 
 import com.FPTU.converter.CommentConverter;
 import com.FPTU.dto.CommentDTO;
+import com.FPTU.dto.RatingDTO;
 import com.FPTU.model.Comment;
 import com.FPTU.model.Course;
 import com.FPTU.model.Rating;
@@ -15,6 +16,7 @@ import com.FPTU.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,11 +47,19 @@ public class CommentServiceImpl implements CommentService {
         } else {
             comment = commentConverter.toEntity(commentDTO);
         }
+
         Course course = courseRepository.getOne(commentDTO.getCourseId());
         User user = userRepository.findByUsername(commentDTO.getUser().getUsername());
         comment.setCourse(course);
         comment.setUser(user);
         comment = commentRepository.save(comment);
+
+        Rating rating = new Rating();
+        rating.setRating(commentDTO.getRating());
+        rating.setUser(user);
+        rating.setCourse(course);
+        ratingRepository.save(rating);
+
         return commentConverter.toDTO(comment);
     }
 

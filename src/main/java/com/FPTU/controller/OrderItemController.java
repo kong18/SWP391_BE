@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -39,7 +40,7 @@ public class OrderItemController {
     }
 
     @PostMapping()
-    public OrderItemDTO addOrderItem(@RequestBody OrderItemDTO orderItemDTO) {
+    public OrderItemDTO addOrderItem(@RequestBody @Valid OrderItemDTO orderItemDTO) {
         return orderItemService.save(orderItemDTO);
     }
     @PreAuthorize("hasRole('ADMIN')")

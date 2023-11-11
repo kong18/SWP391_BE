@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -40,7 +41,7 @@ public class OrderCourseController {
     }
 
     @PostMapping()
-    public OrderCourseDTO addOrderCourse(@RequestBody OrderCourseDTO orderCourseDTO) {
+    public OrderCourseDTO addOrderCourse(@RequestBody @Valid OrderCourseDTO orderCourseDTO) {
         return orderCourseService.save(orderCourseDTO);
     }
 

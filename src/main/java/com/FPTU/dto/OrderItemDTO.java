@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Getter
@@ -13,8 +14,13 @@ import java.util.List;
 @NoArgsConstructor
 public class OrderItemDTO {
     private Long id;
+
+    @NotNull(message = "User null")
     private UserDTO user;
+
+    @NotNull(message = "Total null")
     private Long total;
+
     private String orderDate;
     private List<ItemDTO> items;
     private String status;

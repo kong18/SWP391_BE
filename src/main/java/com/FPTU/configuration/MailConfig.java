@@ -1,7 +1,5 @@
 package com.FPTU.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -13,19 +11,20 @@ import java.util.Properties;
 public class MailConfig {
     @Bean
     public JavaMailSender javaMailSender() {
-        JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-        javaMailSender.setHost("smtp.gmail.com");
-        javaMailSender.setPort(587);
-        javaMailSender.setUsername("example@gmail.com");
-        javaMailSender.setPassword("password");
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost("smtp.gmail.com");
+        mailSender.setPort(587); // Use the appropriate port for your SMTP server
+        mailSender.setUsername("hhson365@gmail.com");
+        // App Password do not change
+        mailSender.setPassword("slzt yeul fqla jqcp");
 
-        Properties properties = javaMailSender.getJavaMailProperties();
-        properties.put("mail.transport.protocol", "smtp");
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.debug", "true");
+        Properties properties = new Properties();
+        properties.setProperty("mail.smtp.auth", "true");
+        properties.setProperty("mail.smtp.starttls.enable", "true");
 
-        return javaMailSender;
+        mailSender.setJavaMailProperties(properties);
+        return mailSender;
     }
+
 
 }

@@ -1,25 +1,39 @@
 package com.FPTU.controller;
 
 import com.FPTU.dto.EmailRequest;
-import com.FPTU.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping()
+@RequestMapping("email")
 public class EmailController {
 
     @Autowired
-    private EmailService emailService;
+    private JavaMailSender javaMailSender;
 
-    @PostMapping("/send-email")
-    public ResponseEntity<String> sendEmail(@RequestBody EmailRequest emailRequest) {
-        emailService.sendEmail(emailRequest.getTo(), emailRequest.getSubject(), emailRequest.getBody());
-        return new ResponseEntity<>("Email sent successfully", HttpStatus.OK);
+
+    private final String recipientEmail = "sonhhse172307@fpt.edu.vn";
+
+    @PostMapping("/send")
+    public String sendEmail(@RequestBody EmailRequest emailRequest) {
+        try {
+
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(recipientEmail);
+            message.setSubject(emailRequest.getSubject());
+            message.setText(emailRequest.getContent());
+            javaMailSender.send(message);
+
+            return "Email sent successfully to " + recipientEmail;
+        } catch (Exception e) {
+            // Handle exceptions appropriately (e.g., log the error)
+            e.printStackTrace();
+            return "Failed to send email";
+        }
     }
 }

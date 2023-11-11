@@ -45,16 +45,19 @@ public class CourseServiceImpl implements CourseService {
     @Autowired
     private RatingConverter ratingConverter;
 
-    @Override
-    public List<CourseDTO> getAllCourses() {
-        List<Course> courses = courseRepository.findAll();
+    private List<CourseDTO> getListDTO(List<Course> courses) {
         return courses.stream()
                 .map(courseConverter::toDTO)
                 .peek(cDTO -> {
-                    cDTO.setRating(ratingRepository.findAverageRating(cDTO.getId()));
-                    if (cDTO.getRating() == null) {
+                    if (ratingRepository.findAverageRating(cDTO.getId()) != null) {
+                        Double rating = ratingRepository.findAverageRating(cDTO.getId());
+                        String formattedRating = String.format("%.2f", rating);
+                        rating = Double.parseDouble(formattedRating);
+                        cDTO.setRating(rating);
+                    } else {
                         cDTO.setRating(0.0);
                     }
+
                     cDTO.setDuration(courseDetailRepository.getSumEstimatedTimeByCourseId(cDTO.getId()));
                     if (cDTO.getDuration() == null) {
                         cDTO.setDuration(0L);
@@ -64,7 +67,11 @@ public class CourseServiceImpl implements CourseService {
                 })
                 .collect(Collectors.toList());
     }
-
+    @Override
+    public List<CourseDTO> getAllCourses() {
+        List<Course> courses = courseRepository.findAll();
+        return getListDTO(courses);
+    }
     @Override
     public CourseDTO save(CourseDTO courseDTO) {
         Course course = new Course();
@@ -90,21 +97,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<CourseDTO> findAllByCategoryId(Long categoryId) {
         List<Course> courses = courseRepository.findByCourseCategory_CategoryId(categoryId);
-        return courses.stream()
-                .map(courseConverter::toDTO)
-                .peek(cDTO -> {
-                    cDTO.setRating(ratingRepository.findAverageRating(cDTO.getId()));
-                    if (cDTO.getRating() == null) {
-                        cDTO.setRating(0.0);
-                    }
-                    cDTO.setDuration(courseDetailRepository.getSumEstimatedTimeByCourseId(cDTO.getId()));
-                    if (cDTO.getDuration() == null) {
-                        cDTO.setDuration(0L);
-                    }
-                    cDTO.setComments(commentService.getCommentsByCourseId(cDTO.getId()));
-
-                })
-                .collect(Collectors.toList());
+        return getListDTO(courses);
     }
 
     @Override
@@ -136,59 +129,20 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<CourseDTO> findByName(String title) {
         List<Course> courses = courseRepository.findByNameContainingIgnoreCase(title);
-        return courses.stream()
-                .map(courseConverter::toDTO)
-                .peek(cDTO -> {
-                    cDTO.setRating(ratingRepository.findAverageRating(cDTO.getId()));
-                    if (cDTO.getRating() == null) {
-                        cDTO.setRating(0.0);
-                    }
-                    cDTO.setDuration(courseDetailRepository.getSumEstimatedTimeByCourseId(cDTO.getId()));
-                    if (cDTO.getDuration() == null) {
-                        cDTO.setDuration(0L);
-                    }
-                    cDTO.setComments(commentService.getCommentsByCourseId(cDTO.getId()));
-                })
-                .collect(Collectors.toList());
+        return getListDTO(courses);
     }
 
     @Override
     public List<CourseDTO> findAllByUserId_RoleCustomer(String username) {
         List<Course> courses = courseRepository.findAllByUserIdRoleCustomer(username);
-        return courses.stream()
-                .map(courseConverter::toDTO)
-                .peek(cDTO -> {
-                    cDTO.setRating(ratingRepository.findAverageRating(cDTO.getId()));
-                    if (cDTO.getRating() == null) {
-                        cDTO.setRating(0.0);
-                    }
-                    cDTO.setDuration(courseDetailRepository.getSumEstimatedTimeByCourseId(cDTO.getId()));
-                    if (cDTO.getDuration() == null) {
-                        cDTO.setDuration(0L);
-                    }
-                    cDTO.setComments(commentService.getCommentsByCourseId(cDTO.getId()));
-                })
-                .collect(Collectors.toList());
+        return getListDTO(courses);
     }
 
     @Override
     public List<CourseDTO> findAllByUserId_RoleInstructor(String username) {
         User user = userRepository.findByUsername(username);
         List<Course> courses = courseRepository.findByUser_UserId(user.getUserId());
-        return courses.stream()
-                .map(courseConverter::toDTO)
-                .peek(cDTO -> {
-                    cDTO.setRating(ratingRepository.findAverageRating(cDTO.getId()));
-                    if (cDTO.getRating() == null) {
-                        cDTO.setRating(0.0);
-                    }
-                    cDTO.setDuration(courseDetailRepository.getSumEstimatedTimeByCourseId(cDTO.getId()));
-                    if (cDTO.getDuration() == null) {
-                        cDTO.setDuration(0L);
-                    }
-                    cDTO.setComments(commentService.getCommentsByCourseId(cDTO.getId()));
-                })
-                .collect(Collectors.toList());
+        return getListDTO(courses);
     }
 
 

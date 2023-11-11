@@ -29,6 +29,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
+@CrossOrigin("http://127.0.0.1:5173/")
 public class UserController {
     private final UserRepository repo;
     private final UserService userService;
@@ -67,12 +68,12 @@ public class UserController {
         if (uploadResult != null && uploadResult.containsKey("secure_url")) {
             String imageUrl = uploadResult.get("secure_url").toString();
 
-            User user = repo.findByUsername(username);
+            User user = userService.findByUsername(username);
             // Update the user's image URL
             user.setImg(imageUrl);
 
             // Save the updated user information
-            repo.save(user);
+            userService.updateUser(user);
 
 
             return ResponseEntity.status(HttpStatus.CREATED).body("Upload successful");

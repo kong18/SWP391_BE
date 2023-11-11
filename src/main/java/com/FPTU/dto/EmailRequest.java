@@ -5,12 +5,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class EmailRequest {
-    private String to;
+    private String emailGet;
+
+    @NotNull(message = "Subject null")
     private String subject;
-    private String body;
+
+    @NotNull(message = "Content null")
+    private String content;
 }

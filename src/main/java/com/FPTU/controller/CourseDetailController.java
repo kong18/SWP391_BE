@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -34,14 +35,14 @@ public class CourseDetailController {
 
     @PreAuthorize("hasRole('INSTRUCTOR')")
     @PostMapping()
-    public ResponseEntity<CourseDetailDTO> addCourseDetail(@RequestBody CourseDetailDTO courseDetailDTO) {
+    public ResponseEntity<CourseDetailDTO> addCourseDetail(@RequestBody @Valid CourseDetailDTO courseDetailDTO) {
         courseDetailDTO = courseDetailService.save(courseDetailDTO);
         return  ResponseEntity.ok(courseDetailDTO);
     }
 
     @PreAuthorize("hasRole('INSTRUCTOR')")
     @PostMapping("/list")
-    public ResponseEntity<List<CourseDetailDTO>> addListCourseDetail(@RequestBody CourseDetailRequest request) {
+    public ResponseEntity<List<CourseDetailDTO>> addListCourseDetail(@RequestBody @Valid CourseDetailRequest request) {
         List<CourseDetailDTO> listCourse = courseDetailService.saveAll(request.getCourseDetails(), request.getCourseId());
         return  ResponseEntity.ok(listCourse);
     }
