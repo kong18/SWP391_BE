@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +43,7 @@ public class ItemController {
 
     @PreAuthorize("hasRole('ADMIN')")// Restrict access to ADMIN role
     @PostMapping
-    public ResponseEntity<ItemDTO> addItem(@RequestBody ItemDTO itemDTO) {
+    public ResponseEntity<ItemDTO> addItem(@RequestBody @Valid ItemDTO itemDTO) {
         ItemDTO i = itemService.save(itemDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(i);
     }
@@ -75,7 +76,7 @@ public class ItemController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping
-    public ResponseEntity<ItemDTO> updateItem(@RequestBody ItemDTO itemDTO) {
+    public ResponseEntity<ItemDTO> updateItem(@RequestBody @Valid ItemDTO itemDTO) {
         if(!itemService.existsById(itemDTO.getId())) {
             throw new ItemNotFoundException(itemDTO.getId());
         }

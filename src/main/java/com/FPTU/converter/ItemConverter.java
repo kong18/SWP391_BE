@@ -32,7 +32,7 @@ public class ItemConverter {
   }
 
   public Item toEntity(ItemDTO itemDTO,Item item){
-    item.setName(item.getName());
+    item.setName(itemDTO.getName());
     item.setDescription(itemDTO.getDescription());
     item.setPrice(itemDTO.getPrice());
     if (itemDTO.getImg() != null) {
