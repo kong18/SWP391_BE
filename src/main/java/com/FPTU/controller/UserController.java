@@ -112,7 +112,6 @@ public class UserController {
         }
         user.setName(userDTO.getName());
         user.setAddress(userDTO.getAddress());
-        user.setImg(userDTO.getImg());
 
         userService.updateUser(user);
         return ResponseEntity.status(HttpStatus.OK).body("Update user successfully");

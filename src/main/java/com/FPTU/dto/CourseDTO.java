@@ -15,13 +15,27 @@ import java.util.List;
 @NoArgsConstructor
 public class CourseDTO {
     private Long id;
+
+    @NotNull(message = "User null")
     private UserDTO user;
+
+    @NotNull(message = "Title null")
     private String title;
+
+    @NotNull(message = "Description null")
     private String description;
+
+    @NotNull(message = "Price null")
     private Long price;
+
     private String img;
+
+    @NotNull(message = "Level null")
     private String level;
+
+    @NotNull(message = "Category null")
     private CourseCategoryDTO category;
+
     private String createdDate;
     private Long duration;
     private Double rating;
