@@ -73,10 +73,10 @@ public class UserController {
             user.setImg(imageUrl);
 
             // Save the updated user information
-            userService.updateUser(user);
+            UserDTO userDTO = userService.updateUser(user);
 
 
-            return ResponseEntity.status(HttpStatus.CREATED).body("Upload successful");
+            return ResponseEntity.ok(userDTO);
         } else {
             // Handle the case where the file upload to Cloudinary failed
             return new ResponseEntity<>("Failed to upload the image", HttpStatus.INTERNAL_SERVER_ERROR);

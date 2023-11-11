@@ -1,6 +1,7 @@
 package com.FPTU.security.service;
 
 import com.FPTU.dto.AuthenticatedUserDto;
+import com.FPTU.dto.UserDTO;
 import com.FPTU.model.User;
 import com.FPTU.security.dto.RegistrationRequest;
 import com.FPTU.security.dto.RegistrationResponse;
@@ -16,7 +17,7 @@ public interface UserService {
 
   AuthenticatedUserDto findAuthenticatedUserByUsername(String username);
 
-  void updateUser(User user);
+  UserDTO updateUser(User user);
 
   List<AuthenticatedUserDto> findAll();
 

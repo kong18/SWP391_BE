@@ -1,6 +1,7 @@
 package com.FPTU.security.service;
 
 import com.FPTU.dto.AuthenticatedUserDto;
+import com.FPTU.dto.UserDTO;
 import com.FPTU.exceptions.UserNotFoundException;
 import com.FPTU.model.User;
 import com.FPTU.model.UserRole;
@@ -82,8 +83,9 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void updateUser(User user) {
-    userRepository.save(user);
+  public UserDTO updateUser(User user) {
+    User getUser = userRepository.save(user);
+    return userMapper.convertToUserDto(getUser);
   }
 
   @Override
