@@ -4,6 +4,7 @@ import com.FPTU.dto.OrderCourseDTO;
 import com.FPTU.dto.OrderRevenueByMonth;
 import com.FPTU.service.OrderCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,14 +42,19 @@ public class OrderCourseController {
     }
 
     @PostMapping()
-    public OrderCourseDTO addOrderCourse(@RequestBody @Valid OrderCourseDTO orderCourseDTO) {
-        return orderCourseService.save(orderCourseDTO);
+    public ResponseEntity<?> addOrderCourse(@RequestBody @Valid OrderCourseDTO orderCourseDTO) {
+        if (orderCourseDTO.getTotal() == 0) {
+            return ResponseEntity.ok("");
+        }
+        OrderCourseDTO o = orderCourseService.save(orderCourseDTO);
+        return ResponseEntity.ok(o);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public void updateStatus(@PathVariable("id") Long orderId, @RequestBody Map<String, String> request) {
-        String newStatus = request.get("newStatus");
-        orderCourseService.updateStatus(orderId, newStatus);
+    public ResponseEntity<String> updateStatus(@PathVariable("id") Long orderId) {
+        String newStatus = "Old";
+        return ResponseEntity.ok(orderCourseService.updateStatus(orderId, newStatus)) ;
+
     }
 }

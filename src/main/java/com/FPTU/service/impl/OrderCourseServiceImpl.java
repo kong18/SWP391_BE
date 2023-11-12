@@ -97,13 +97,17 @@ public class OrderCourseServiceImpl implements OrderCourseService {
 
     @Override
     @Transactional
-    public void updateStatus(Long orderId, String newStatus) {
+    public String updateStatus(Long orderId, String newStatus) {
         // Implement the logic to update the status based on orderId and newStatus
         OrderCourse orderCourse = orderCourseRepository.findById(orderId).orElse(null);
+        if (orderCourse.getStatus() == "Old") {
+            return "Old Status";
+        }
         if (orderCourse != null) {
             orderCourse.setStatus(newStatus);
             orderCourseRepository.save(orderCourse);
         }
+        return "Update Success";
     }
 
     @Override

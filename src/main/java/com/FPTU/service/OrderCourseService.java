@@ -13,7 +13,7 @@ public interface OrderCourseService {
 
     List<OrderRevenueByMonth> getMonthlyRevenue();
 
-    void updateStatus(Long orderId, String newStatus);
+    String updateStatus(Long orderId, String newStatus);
 
     List<OrderCourseDTO> findByUserName(String username);
 }

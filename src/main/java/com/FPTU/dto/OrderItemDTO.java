@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.List;
 
 @Getter
@@ -19,6 +20,7 @@ public class OrderItemDTO {
     private UserDTO user;
 
     @NotNull(message = "Total null")
+    @Positive(message = "Total must be positive")
     private Long total;
 
     private String orderDate;

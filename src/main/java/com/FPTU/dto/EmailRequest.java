@@ -12,11 +12,11 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EmailRequest {
-    private String emailGet;
+    private String from;
 
     @NotNull(message = "Subject null")
     private String subject;
 
     @NotNull(message = "Content null")
-    private String content;
+    private String message;
 }

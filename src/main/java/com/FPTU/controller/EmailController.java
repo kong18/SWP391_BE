@@ -4,15 +4,12 @@ import com.FPTU.dto.EmailRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("email")
+@RequestMapping("/email")
+@CrossOrigin("http://127.0.0.1:5173/")
 public class EmailController {
-
     @Autowired
     private JavaMailSender javaMailSender;
 
@@ -26,7 +23,7 @@ public class EmailController {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(recipientEmail);
             message.setSubject(emailRequest.getSubject());
-            message.setText(emailRequest.getContent());
+            message.setText(emailRequest.getMessage());
             javaMailSender.send(message);
 
             return "Email sent successfully to " + recipientEmail;

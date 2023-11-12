@@ -49,7 +49,7 @@ public class CourseDetailController {
 
     @PreAuthorize("hasRole('INSTRUCTOR')")
     @PutMapping("/{id}")
-    public ResponseEntity<CourseDetailDTO> updateCourseDetail(@RequestBody CourseDetailDTO courseDetailDTO, @PathVariable("id") Long id) {
+    public ResponseEntity<CourseDetailDTO> updateCourseDetail(@RequestBody @Valid CourseDetailDTO courseDetailDTO, @PathVariable("id") Long id) {
         if(!courseDetailService.existsById(id)) {
             throw new CourseDetailNotFoundException(id);
         }

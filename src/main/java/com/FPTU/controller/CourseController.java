@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -91,13 +92,13 @@ public class CourseController {
 
     @PreAuthorize("hasRole('INSTRUCTOR')")
     @PostMapping()
-    public ResponseEntity<CourseDTO> addCourse(@RequestBody CourseDTO courseDTO) {
+    public ResponseEntity<CourseDTO> addCourse(@RequestBody @Valid CourseDTO courseDTO) {
         CourseDTO c = courseService.save(courseDTO);
         return  ResponseEntity.status(HttpStatus.CREATED).body(c);
     }
     @PreAuthorize("hasRole('INSTRUCTOR')")
     @PutMapping()
-    public ResponseEntity<CourseDTO> updateCourse(@RequestBody CourseDTO courseDTO) {
+    public ResponseEntity<CourseDTO> updateCourse(@RequestBody @Valid CourseDTO courseDTO) {
         if(!courseService.existsById(courseDTO.getId())) {
             throw new CourseNotFoundException(courseDTO.getId());
         }

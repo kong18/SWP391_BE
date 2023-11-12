@@ -24,6 +24,9 @@ public class RegistrationRequest extends Request {
   @NotEmpty(message = "{registration_username_not_empty}")
   private String username;
 
+  @NotEmpty(message = "{registration_address_not_empty}")
+  private String address;
+
   @NotEmpty(message = "{registration_userRole_not_empty}")
   private String role;
 

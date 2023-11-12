@@ -62,6 +62,7 @@ public class UserServiceImpl implements UserService {
     user.setPassword(passwordEncoder.encode(user.getPassword()));
     user.setUserRole(UserRole.valueOf(registrationRequest.getRole()));
     user.setImg("https://yt3.googleusercontent.com/-CFTJHU7fEWb7BYEb6Jh9gm1EpetvVGQqtof0Rbh-VQRIznYYKJxCaqv_9HeBcmJmIsp2vOO9JU=s900-c-k-c0x00ffffff-no-rj");
+    user.setAddress(registrationRequest.getAddress());
 
     userRepository.save(user);
 

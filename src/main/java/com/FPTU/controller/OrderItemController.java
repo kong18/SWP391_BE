@@ -1,9 +1,11 @@
 package com.FPTU.controller;
 
+import com.FPTU.dto.OrderCourseDTO;
 import com.FPTU.dto.OrderItemDTO;
 import com.FPTU.dto.OrderRevenueByMonth;
 import com.FPTU.service.OrderItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,12 +42,16 @@ public class OrderItemController {
     }
 
     @PostMapping()
-    public OrderItemDTO addOrderItem(@RequestBody @Valid OrderItemDTO orderItemDTO) {
-        return orderItemService.save(orderItemDTO);
+    public ResponseEntity<?> addOrderItem(@RequestBody @Valid OrderItemDTO orderItemDTO) {
+        if (orderItemDTO.getTotal() == 0) {
+            return ResponseEntity.ok("");
+        }
+        OrderItemDTO o = orderItemService.save(orderItemDTO);
+        return ResponseEntity.ok(o);
     }
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public String updateStatus(@PathVariable("id") Long id, @RequestBody OrderItemDTO orderItemDTO) {
-        return orderItemService.updateStatus(orderItemDTO.getStatus(), id);
+    public ResponseEntity<String> updateStatus(@PathVariable("id") Long id, @RequestBody OrderItemDTO orderItemDTO) {
+        return ResponseEntity.ok(orderItemService.updateStatus(orderItemDTO.getStatus(), id)) ;
     }
 }

@@ -66,16 +66,5 @@ public class PaymentController {
         return "cancel";
     }
 
-    @GetMapping(URL_PAYPAL_SUCCESS)
-    public String successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) {
-        try {
-            Payment payment = paypalService.executePayment(paymentId, payerId);
-            if (payment.getState().equals("approved")) {
-                return "success";
-            }
-        } catch (PayPalRESTException e) {
-            log.error(e.getMessage());
-        }
-        return "redirect:/";
-    }
+
 }
