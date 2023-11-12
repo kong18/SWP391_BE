@@ -21,6 +21,6 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             "on od.item_id = i.item_id\n" +
             "join order_item o\n" +
             "on o.order_id = od.order_id\n" +
-            "where o.order_id = 1", nativeQuery = true)
+            "where o.order_id = :order_id", nativeQuery = true)
     List<Item> findItemByOrderId(@Param("order_id") Long id);
 }
