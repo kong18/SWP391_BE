@@ -28,5 +28,4 @@ public class OrderItemDTO {
     private String status;
     private String address;
     private String paymentMethod;
-    private String phoneNumber;
 }

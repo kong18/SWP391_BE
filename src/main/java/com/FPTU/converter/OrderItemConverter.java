@@ -15,7 +15,6 @@ public class OrderItemConverter {
         orderItem.setTotal(orderItemDTO.getTotal());
         orderItem.setStatus(Status.PROCESSING);
         orderItem.setAddress(orderItemDTO.getAddress());
-        orderItem.setPhoneNumber(orderItemDTO.getPhoneNumber());
         orderItem.setPaymentMethod("Paypal");
         return orderItem;
     }
@@ -26,7 +25,6 @@ public class OrderItemConverter {
         orderItemDTO.setTotal(orderItem.getTotal());
         orderItemDTO.setStatus(orderItem.getStatus().toString());
         orderItemDTO.setAddress(orderItemDTO.getAddress());
-        orderItemDTO.setPhoneNumber(orderItemDTO.getPhoneNumber());
         orderItemDTO.setPaymentMethod(orderItem.getPaymentMethod());
         return  orderItemDTO;
     }
