@@ -81,7 +81,7 @@ public class CourseServiceImpl implements CourseService {
         } else {
             course = courseConverter.toEntity(courseDTO);
             LocalDate now = LocalDate.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             String formattedDateTime = now.format(formatter);
             course.setCreatedDate(formattedDateTime);
         }

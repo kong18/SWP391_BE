@@ -1,5 +1,7 @@
 package com.FPTU.controller;
 
+import com.FPTU.dto.InstructorHistory;
+import com.FPTU.dto.InstructorStatic;
 import com.FPTU.dto.OrderCourseDTO;
 import com.FPTU.dto.OrderRevenueByMonth;
 import com.FPTU.service.OrderCourseService;
@@ -32,13 +34,23 @@ public class OrderCourseController {
     }
 
     @GetMapping("/history/{username}")
-    public List<OrderCourseDTO> findOrderCourseByUserName(@PathVariable("username") String username) {
-        return orderCourseService.findByUserName(username);
+    public List<OrderCourseDTO> findOrderCourseByUserNameRoleCustomer(@PathVariable("username") String username) {
+        return orderCourseService.findByUserNameRoleCustomer(username);
     }
 
     @GetMapping("/monthly")
     public List<OrderRevenueByMonth> getMonthlyRevenue() {
         return orderCourseService.getMonthlyRevenue();
+    }
+
+    @GetMapping("/static/{username}")
+    public List<InstructorStatic> getMonthlyRevenue(@PathVariable("username") String username) {
+        return orderCourseService.getInstructorStatic(username);
+    }
+
+    @GetMapping("/history/instructor/{username}")
+    public List<InstructorHistory> getInstructorHistory(@PathVariable("username") String username) {
+        return orderCourseService.getInstructorHistory(username);
     }
 
     @PostMapping()

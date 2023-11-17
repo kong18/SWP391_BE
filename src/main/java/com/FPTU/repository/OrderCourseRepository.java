@@ -31,6 +31,21 @@ public interface OrderCourseRepository extends JpaRepository<OrderCourse, Long> 
             "ORDER BY YEAR(o.order_date) DESC, MONTH(o.order_date) DESC", nativeQuery = true)
     List<Object[]> getMonthlyRevenue();
 
+    @Query(value = "SELECT o.course_id, c.price, COUNT(o.course_id) AS course_count\n" +
+            "FROM order_detail_course o\n" +
+            "JOIN course c ON c.course_id = o.course_id \n" +
+            "WHERE o.course_id IN (SELECT c.course_id FROM course c WHERE c.user_id = :Id)\n" +
+            "GROUP BY o.course_id, c.price", nativeQuery = true)
+    List<Object[]> getInstructorStatic(@Param("Id") Long userId);
+
+    @Query(value = "SELECT c.title, u.name\n" +
+            "FROM order_detail_course o\n" +
+            "JOIN course c ON c.course_id = o.course_id\n" +
+            "JOIN order_course oc on oc.order_id = o.order_id\n" +
+            "JOIN user u on u.user_id = oc.user_id\n" +
+            "WHERE o.course_id IN (SELECT c.course_id FROM course c WHERE c.user_id = :Id)", nativeQuery = true)
+    List<Object[]> getInstructorHistory(@Param("Id") Long userId);
+
     List<OrderCourse> findByUser_UserId(Long userId);
 
 

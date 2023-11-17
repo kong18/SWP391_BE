@@ -1,5 +1,7 @@
 package com.FPTU.service;
 
+import com.FPTU.dto.InstructorHistory;
+import com.FPTU.dto.InstructorStatic;
 import com.FPTU.dto.OrderCourseDTO;
 import com.FPTU.dto.OrderRevenueByMonth;
 
@@ -13,7 +15,13 @@ public interface OrderCourseService {
 
     List<OrderRevenueByMonth> getMonthlyRevenue();
 
+    List<InstructorStatic> getInstructorStatic(String username);
+
+    List<InstructorHistory> getInstructorHistory(String username);
+
     String updateStatus(Long orderId, String newStatus);
 
-    List<OrderCourseDTO> findByUserName(String username);
+    List<OrderCourseDTO> findByUserNameRoleCustomer(String username);
+
+    List<OrderCourseDTO> findByUserNameRoleInstructor(String username);
 }

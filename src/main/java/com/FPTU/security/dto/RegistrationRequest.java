@@ -25,7 +25,7 @@ public class RegistrationRequest extends Request {
   private String username;
 
   @NotEmpty(message = "{registration_address_not_empty}")
-  private String address;
+  private String address = "Go Vap";
 
   @NotEmpty(message = "{registration_userRole_not_empty}")
   private String role;

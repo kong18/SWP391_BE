@@ -2,10 +2,7 @@ package com.FPTU.service.impl;
 
 import com.FPTU.converter.CourseConverter;
 import com.FPTU.converter.OrderCourseConverter;
-import com.FPTU.dto.CourseDTO;
-import com.FPTU.dto.OrderCourseDTO;
-import com.FPTU.dto.OrderRevenueByMonth;
-import com.FPTU.dto.UserDTO;
+import com.FPTU.dto.*;
 import com.FPTU.model.Course;
 import com.FPTU.model.OrderCourse;
 import com.FPTU.model.OrderDetailCourse;
@@ -96,6 +93,30 @@ public class OrderCourseServiceImpl implements OrderCourseService {
     }
 
     @Override
+    public List<InstructorStatic> getInstructorStatic(String username) {
+        User user = userRepository.findByUsername(username);
+
+        List<InstructorStatic> list = new ArrayList<>();
+        for (Object[] o : orderCourseRepository.getInstructorStatic(user.getUserId())) {
+            InstructorStatic i = new InstructorStatic(o);
+            list.add(i);
+        }
+        return list;
+    }
+
+    @Override
+    public List<InstructorHistory> getInstructorHistory(String username) {
+        User user = userRepository.findByUsername(username);
+
+        List<InstructorHistory> list = new ArrayList<>();
+        for (Object[] o : orderCourseRepository.getInstructorHistory(user.getUserId())) {
+            InstructorHistory i = new InstructorHistory(o);
+            list.add(i);
+        }
+        return list;
+    }
+
+    @Override
     @Transactional
     public String updateStatus(Long orderId, String newStatus) {
         // Implement the logic to update the status based on orderId and newStatus
@@ -111,9 +132,14 @@ public class OrderCourseServiceImpl implements OrderCourseService {
     }
 
     @Override
-    public List<OrderCourseDTO> findByUserName(String username) {
+    public List<OrderCourseDTO> findByUserNameRoleCustomer(String username) {
         List<OrderCourse> list = orderCourseRepository.findByUser_UserId(userRepository.findByUsername(username).getUserId());
         return getListDTO(list);
+    }
+
+    @Override
+    public List<OrderCourseDTO> findByUserNameRoleInstructor(String username) {
+        return null;
     }
 
     private List<OrderCourseDTO> getListDTO(List<OrderCourse> list) {
