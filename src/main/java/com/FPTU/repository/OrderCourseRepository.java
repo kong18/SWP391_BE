@@ -43,7 +43,8 @@ public interface OrderCourseRepository extends JpaRepository<OrderCourse, Long> 
             "JOIN course c ON c.course_id = o.course_id\n" +
             "JOIN order_course oc on oc.order_id = o.order_id\n" +
             "JOIN user u on u.user_id = oc.user_id\n" +
-            "WHERE o.course_id IN (SELECT c.course_id FROM course c WHERE c.user_id = :Id)", nativeQuery = true)
+            "WHERE o.course_id IN (SELECT c.course_id FROM course c WHERE c.user_id = :Id)" +
+            "Order by oc.order_date desc", nativeQuery = true)
     List<Object[]> getInstructorHistory(@Param("Id") Long userId);
 
     List<OrderCourse> findByUser_UserId(Long userId);
