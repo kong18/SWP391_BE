@@ -38,7 +38,5 @@ public class OrderItem {
 
     private String address;
 
-    private String phoneNumber;
-
     private String paymentMethod;
 }

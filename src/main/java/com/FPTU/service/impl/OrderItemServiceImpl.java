@@ -1,26 +1,28 @@
 package com.FPTU.service.impl;
 
+import com.FPTU.converter.ItemConverter;
+import com.FPTU.converter.OrderCourseConverter;
 import com.FPTU.converter.OrderItemConverter;
-import com.FPTU.dto.OrderItemDTO;
-import com.FPTU.model.OrderDetailItem;
-import com.FPTU.model.OrderItem;
-import com.FPTU.model.Status;
-import com.FPTU.model.User;
-import com.FPTU.repository.ItemRepository;
-import com.FPTU.repository.OrderDetailItemRepository;
-import com.FPTU.repository.OrderItemRepository;
-import com.FPTU.repository.UserRepository;
+import com.FPTU.dto.*;
+import com.FPTU.model.*;
+import com.FPTU.repository.*;
+import com.FPTU.service.OrderCourseService;
 import com.FPTU.service.OrderItemService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import static com.mysql.cj.conf.PropertyKey.logger;
 
 @Service
 
@@ -36,35 +38,33 @@ public class OrderItemServiceImpl implements OrderItemService {
     private ItemRepository itemRepository;
 
     @Autowired
+    private ItemConverter itemConverter;
+
+    @Autowired
     private OrderDetailItemRepository orderDetailItemRepository;
 
     @Override
     public List<OrderItemDTO> findAll() {
-        List<OrderItem> list = orderItemRepository.findAll();
-        List<OrderItemDTO> listDTO = new ArrayList<>();
-        for (OrderItem o : list) {
-            OrderItemDTO orderItemDTO = orderItemConverter.toDTO(o);
-            listDTO.add(orderItemDTO);
-        }
-        return listDTO;
+        List<OrderItem> list = orderItemRepository.findAllByOrderDateDesc();
+        return getListDTO(list);
     }
 
     @Override
     public OrderItemDTO save(OrderItemDTO orderItemDTO) {
         OrderItem orderItem = new OrderItem();
         orderItem = orderItemConverter.toEntity(orderItemDTO);
-
-        LocalDate now = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDateTime = now.format(formatter);
         orderItem.setOrderDate(formattedDateTime);
 
-        User user = userRepository.getOne(orderItemDTO.getUserId());
+        User user = userRepository.findByUsername(orderItemDTO.getUser().getUsername());
         orderItem.setUser(user);
+        orderItem.setAddress(user.getAddress());
         orderItem = orderItemRepository.save(orderItem);
-        for (Long c : orderItemDTO.getItemId()) {
+        for (ItemDTO i : orderItemDTO.getItems()) {
             OrderDetailItem orderDetailItem = new OrderDetailItem();
-            orderDetailItem.setItem(itemRepository.getOne(c));
+            orderDetailItem.setItem(itemRepository.getOne(i.getId()));
             orderDetailItem.setOrderItem(orderItemRepository.getOne(orderItem.getOrderId()));
             orderDetailItemRepository.save(orderDetailItem);
         }
@@ -73,7 +73,15 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     public OrderItemDTO findById(Long id) {
-        return orderItemConverter.toDTO(orderItemRepository.getOne(id));
+        OrderItemDTO orderItemDTO = orderItemConverter.toDTO(orderItemRepository.getOne(id));
+        List<Item> items = itemRepository.findItemByOrderId(orderItemDTO.getId());
+        List<ItemDTO> itemsDTO = new ArrayList<>();
+        for (Item c: items) {
+            itemsDTO.add(itemConverter.toDTO(c));
+        }
+
+        orderItemDTO.setItems(itemsDTO);
+        return orderItemDTO;
     }
 
     @Override
@@ -93,5 +101,69 @@ public class OrderItemServiceImpl implements OrderItemService {
             return "Update Success!";
         }
         return "The order with id " + id + " was delivered";
+    }
+
+    @Override
+    public List<OrderRevenueByMonth> getMonthlyRevenue() {
+        List<OrderRevenueByMonth> list = new ArrayList<>();
+        for (Object[] o : orderItemRepository.getMonthlyRevenue()) {
+            OrderRevenueByMonth or = new OrderRevenueByMonth(o);
+            list.add(or);
+        }
+        return list;
+    }
+
+    @Override
+    public List<OrderItemDTO> findByUserName(String username) {
+        List<OrderItem> list = orderItemRepository.findByUser_UserId(userRepository.findByUsername(username).getUserId());
+        return getListDTO(list);
+    }
+
+    private List<OrderItemDTO> getListDTO(List<OrderItem> list) {
+        List<OrderItemDTO> listDTO = new ArrayList<>();
+        for (OrderItem o : list) {
+            OrderItemDTO orderItemDTO = orderItemConverter.toDTO(o);
+
+            String orderDate = getOrderDate(o.getOrderDate());
+            orderItemDTO.setOrderDate(orderDate);
+
+            List<Item> items = itemRepository.findItemByOrderId(orderItemDTO.getId());
+            List<ItemDTO> itemsDTO = new ArrayList<>();
+            for (Item c: items) {
+                itemsDTO.add(itemConverter.toDTO(c));
+            }
+
+            orderItemDTO.setItems(itemsDTO);
+
+            listDTO.add(orderItemDTO);
+        }
+        return listDTO;
+    }
+
+    public String getOrderDate(String l) {
+        String time = "";
+        LocalDateTime currentTime = LocalDateTime.now();
+        LocalDateTime orderDate = convertStringToLocalDateTime(l);
+        Duration duration = Duration.between(orderDate, currentTime);
+        long minutes = duration.toMinutes();
+
+        if (minutes < 60) {
+            time = minutes + " minutes ago";
+        } else if (minutes < (24 * 60)) {
+            long hours = duration.toHours();
+            time = hours + " hours ago";
+        } else if (minutes < (24 * 60 * 30)) {
+            long days = duration.toDays();
+            time = days + " days ago";
+        } else {
+            long months = minutes / (24 * 60 * 30);
+            time = months + " months ago";
+        }
+        return time;
+    }
+
+    public LocalDateTime convertStringToLocalDateTime(String dateString) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return LocalDateTime.parse(dateString, formatter);
     }
 }

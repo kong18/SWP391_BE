@@ -1,6 +1,7 @@
 package com.FPTU.controller;
 
 import com.FPTU.dto.CourseDetailDTO;
+import com.FPTU.dto.CourseDetailRequest;
 import com.FPTU.exceptions.CourseDetailNotFoundException;
 import com.FPTU.exceptions.CourseNotFoundException;
 import com.FPTU.service.CourseDetailService;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -22,6 +24,7 @@ public class CourseDetailController {
     @Autowired
     private CourseService courseService;
 
+
     @GetMapping("/{course_id}")
     public List<CourseDetailDTO> getCourseDetailByCourseId(@PathVariable("course_id") Long courseId) {
         if(!courseService.existsById(courseId)) {
@@ -32,13 +35,21 @@ public class CourseDetailController {
 
     @PreAuthorize("hasRole('INSTRUCTOR')")
     @PostMapping()
-    public ResponseEntity<CourseDetailDTO> addCourseDetail(@RequestBody CourseDetailDTO courseDetailDTO) {
+    public ResponseEntity<CourseDetailDTO> addCourseDetail(@RequestBody @Valid CourseDetailDTO courseDetailDTO) {
         courseDetailDTO = courseDetailService.save(courseDetailDTO);
         return  ResponseEntity.ok(courseDetailDTO);
     }
+
+    @PreAuthorize("hasRole('INSTRUCTOR')")
+    @PostMapping("/list")
+    public ResponseEntity<List<CourseDetailDTO>> addListCourseDetail(@RequestBody @Valid CourseDetailRequest request) {
+        List<CourseDetailDTO> listCourse = courseDetailService.saveAll(request.getCourseDetails(), request.getCourseId());
+        return  ResponseEntity.ok(listCourse);
+    }
+
     @PreAuthorize("hasRole('INSTRUCTOR')")
     @PutMapping("/{id}")
-    public ResponseEntity<CourseDetailDTO> updateCourseDetail(@RequestBody CourseDetailDTO courseDetailDTO, @PathVariable("id") Long id) {
+    public ResponseEntity<CourseDetailDTO> updateCourseDetail(@RequestBody @Valid CourseDetailDTO courseDetailDTO, @PathVariable("id") Long id) {
         if(!courseDetailService.existsById(id)) {
             throw new CourseDetailNotFoundException(id);
         }

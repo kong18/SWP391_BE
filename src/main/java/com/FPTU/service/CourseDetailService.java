@@ -12,4 +12,6 @@ public interface CourseDetailService {
     boolean existsById(Long id);
 
     void deleteById(Long id);
+
+    List<CourseDetailDTO> saveAll(List<CourseDetailDTO> list, Long courseId);
 }

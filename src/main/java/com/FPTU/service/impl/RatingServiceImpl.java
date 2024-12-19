@@ -34,11 +34,20 @@ public class RatingServiceImpl implements RatingService {
             rating = ratingConverter.toEntity(ratingDTO);
         }
         Course course = courseRepository.getOne(ratingDTO.getCourseId());
-        User user = userRepository.getOne(ratingDTO.getUserId());
+        User user = userRepository.findByUsername(ratingDTO.getUser().getUsername());
         rating.setCourse(course);
         rating.setUser(user);
         rating = ratingRepository.save(rating);
         return ratingConverter.toDTO(rating);
+    }
+
+    @Override
+    public boolean existByUserNameAndCourseId(String username, Long courseId) {
+        if (ratingRepository.findRatingByUserIdAndCourseId(
+                userRepository.findByUsername(username).getUserId(), courseId) == null) {
+            return false;
+        }
+        return true;
     }
 
 

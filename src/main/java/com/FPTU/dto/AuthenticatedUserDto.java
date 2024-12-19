@@ -10,8 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class AuthenticatedUserDto {
 
-  private Long id;
-
   private String name;
 
   private String username;
@@ -21,6 +19,8 @@ public class AuthenticatedUserDto {
   private UserRole userRole;
 
   private String img;
+
+  private String email;
 
   private String address;
 

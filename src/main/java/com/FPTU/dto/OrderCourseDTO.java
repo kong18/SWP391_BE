@@ -5,16 +5,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderCourseDTO {
     private Long id;
-    private Long userId;
+    @NotNull(message = "User null")
+    private UserDTO user;
+
+    @NotNull(message = "Total null")
     private Long total;
+
     private String orderDate;
-    private Long[] courseId;
+    private List<CourseDTO> courses;
     private String status;
     private String paymentMethod;
 }

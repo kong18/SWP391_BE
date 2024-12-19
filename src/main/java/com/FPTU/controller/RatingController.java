@@ -17,6 +17,9 @@ public class RatingController {
 
     @PostMapping()
     public ResponseEntity<String> addRating(@RequestBody RatingDTO ratingDTO) {
+        if (ratingService.existByUserNameAndCourseId(ratingDTO.getUser().getUsername(), ratingDTO.getCourseId())) {
+            return  ResponseEntity.status(HttpStatus.CREATED).body("Rating only 1 time");
+        }
         ratingService.save(ratingDTO);
         return  ResponseEntity.status(HttpStatus.CREATED).body("Rating added successfully");
     }

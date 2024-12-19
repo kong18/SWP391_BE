@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class UserNotFoundException extends BusinessException {
-  public UserNotFoundException(String errorMessage) {
-    super(errorMessage);
-  }
+    public UserNotFoundException(String errorMessage) {
+        super(errorMessage);
+    }
 }

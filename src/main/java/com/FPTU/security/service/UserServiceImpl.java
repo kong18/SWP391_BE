@@ -1,6 +1,7 @@
 package com.FPTU.security.service;
 
 import com.FPTU.dto.AuthenticatedUserDto;
+import com.FPTU.dto.UserDTO;
 import com.FPTU.exceptions.UserNotFoundException;
 import com.FPTU.model.User;
 import com.FPTU.model.UserRole;
@@ -15,6 +16,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Service
@@ -39,13 +43,14 @@ public class UserServiceImpl implements UserService {
   @Override
   public User findByUsername(String username) {
     final User user = userRepository.findByUsername(username);
-    if (user == null) {
-      final String errorMessage = exceptionMessageAccessor.getMessage(
-              null, USERNAME_NOT_FOUND);
-      throw new UserNotFoundException(errorMessage);
-    } else {
-      return user;
-    }
+//    if (user == null) {
+//      final String errorMessage = exceptionMessageAccessor.getMessage(
+//              null, USERNAME_NOT_FOUND);
+//      throw new UserNotFoundException(errorMessage);
+//    } else {
+//      return user;
+//    }
+    return user;
   }
 
   @Override
@@ -56,6 +61,8 @@ public class UserServiceImpl implements UserService {
     final User user = userMapper.convertToUser(registrationRequest);
     user.setPassword(passwordEncoder.encode(user.getPassword()));
     user.setUserRole(UserRole.valueOf(registrationRequest.getRole()));
+    user.setImg("https://yt3.googleusercontent.com/-CFTJHU7fEWb7BYEb6Jh9gm1EpetvVGQqtof0Rbh-VQRIznYYKJxCaqv_9HeBcmJmIsp2vOO9JU=s900-c-k-c0x00ffffff-no-rj");
+    user.setAddress(registrationRequest.getAddress());
 
     userRepository.save(user);
 
@@ -75,4 +82,28 @@ public class UserServiceImpl implements UserService {
 
     return userMapper.convertToAuthenticatedUserDto(user);
   }
+
+  @Override
+  public UserDTO updateUser(User user) {
+    User getUser = userRepository.save(user);
+    return userMapper.convertToUserDto(getUser);
+  }
+
+  @Override
+  public List<AuthenticatedUserDto> findAll() {
+    List<User> list = userRepository.findAll();
+    return list.stream()
+            .map(userMapper::convertToAuthenticatedUserDto)
+            .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<AuthenticatedUserDto> findByRoleInstructor() {
+    List<User> list = userRepository.findByRole("ROLE_INSTRUCTOR");
+    return list.stream()
+            .map(userMapper::convertToAuthenticatedUserDto)
+            .collect(Collectors.toList());
+  }
+
+
 }
